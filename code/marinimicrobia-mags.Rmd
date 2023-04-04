@@ -1,0 +1,14 @@
+*This will be the working document for my project.*
+
+Load required packages.
+
+```{r}
+library(tidyverse)
+```
+
+Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
+
+```{r}
+# 
+```
+
