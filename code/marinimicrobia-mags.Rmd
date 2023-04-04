@@ -4,11 +4,28 @@ Load required packages.
 
 ```{r}
 library(tidyverse)
+library(GEOquery)
 ```
 
 Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
 
 ```{r}
-# 
+# set path to all data
+path <- "~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/"
+```
+
+Find bins that are Marinimicrobia. These bins are MAGs (metagenome assembled genomes), and I'll find which are Marinimicrobia by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where the majority of contigs are Marinimicrobia.
+
+```{r}
+# open file
+classification <- read.csv(paste0(path, "CAT-BAT/1058_P1_2018_585_0.2um/1058_P1_2018_585_0.2um_assembly_plus.contig2classification_names.txt"), sep = "\t")
+
+# get only those labeled as Marinimicrobia
+classification <- classification[str_detect(classification$species, "Marinimicrobia"),]
+
+# add this classification file to the repo
+write.csv(classification, "~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
+
+# narrow down bin options 
 ```
 
