@@ -31,7 +31,7 @@ Now that I have a classification file and my bins, I can find bins where the maj
 
 ```{r}
 # get Marinimicrobia bins
-classification <- read.csv("~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
+classification <- read.csv("~/github/jordan-marinimicrobia/output/CATBAT_all.csv")
 
 # run through each binning method
 bin_path <- "~/github/jordan-marinimicrobia/data/Bins/"
@@ -46,13 +46,14 @@ for (i in 1:6){
   bins <- list.files(pathname)
   
   for (binname in bins){
+    print(binname)
     bin_pathname <- paste0(pathname, binname)
     contig_names <- read.csv(bin_pathname, header=F)
     all_contigs <- NULL
     
     for (i in 1:nrow(contig_names)){
       contigname <- contig_names[i,1]
-      find_contig <- lca %>% filter(str_detect(X..ORF, contigname))
+      find_contig <- classification %>% filter(str_detect(X..contig, contigname))
       all_contigs <- rbind(all_contigs, find_contig)
     }
     
@@ -61,10 +62,12 @@ for (i in 1:6){
     if (identical(consensus[str_detect(consensus, "Marinimicrobia")], character(0)) == F){
       a <- a + 1
       mar_bins$bin[a] <- binname
-      mar_bin$sample[a] <- bin_method
+      mar_bins$sample[a] <- bin_method
     }
   }
   
 }
+
+mar_bins <- as.data.frame(mar_bins)
 ```
 
