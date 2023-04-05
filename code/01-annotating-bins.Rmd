@@ -25,7 +25,46 @@ classification <- classification[str_detect(classification$species, "Marinimicro
 
 # add this classification file to the repo
 write.csv(classification, "~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
+```
 
-# narrow down bin options
+Now that I have a classification file and my bins, I can find bins where the majority of reads and contigs are Marinimicrobia
+
+```{r}
+# get Marinimicrobia bins
+classification <- read.csv("~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
+
+# run through each binning method
+bin_path <- "~/github/jordan-marinimicrobia/data/Bins/"
+  
+mar_bins <- NULL
+a <- 0
+
+for (i in 1:6){
+  
+  bin_method <- list.files(bin_path)[i]
+  pathname <- paste0(bin_path, bin_method, "/")
+  bins <- list.files(pathname)
+  
+  for (binname in bins){
+    bin_pathname <- paste0(pathname, binname)
+    contig_names <- read.csv(bin_pathname, header=F)
+    all_contigs <- NULL
+    
+    for (i in 1:nrow(contig_names)){
+      contigname <- contig_names[i,1]
+      find_contig <- lca %>% filter(str_detect(X..ORF, contigname))
+      all_contigs <- rbind(all_contigs, find_contig)
+    }
+    
+    # majority has to be Marinimicrobia for me to look at the bin
+    consensus <- names(which.max(table(all_contigs$species)))
+    if (identical(consensus[str_detect(consensus, "Marinimicrobia")], character(0)) == F){
+      a <- a + 1
+      mar_bins$bin[a] <- binname
+      mar_bin$sample[a] <- bin_method
+    }
+  }
+  
+}
 ```
 
