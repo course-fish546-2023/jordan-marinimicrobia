@@ -76,15 +76,21 @@ Use BUSCO (which is similar to CheckM to get size, contamination, etc of bins). 
 
 ```{r}
 # Get fasta files for each bin
-all <- readDNAStringSet("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus.fna")
-bin1_nms <- read.csv("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/47_sample_bam_bins/47_sample_bam_bin.234", header = F)
-test <- str_detect(all@ranges@NAMES, paste(bin1_nms$V1, collapse = "|"))
-index <- which(test == T)
-test <- all[index]
-writeXStringSet(test, "~/Downloads/test.fa", format = "fasta")
+mar_bins <- read.csv("~/github/jordan-marinimicrobia/output/all_mar_bins.csv")
+all <- readDNAStringSet("~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus.fna")
+path <- "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/"
+
+for (i in 1:nrow(mar_bins)){
+  bin <- mar_bins$bin[i]
+  bintype <- mar_bins$sample[i]
+  bin_nms <- read.csv(paste0(path, bintype, "/", bin), header = F)
+  small_fa <- str_detect(all@ranges@NAMES, paste(bin_nms$V1, collapse = "|"))
+  index <- which(small_fa == T)
+  small_fa <- all[index]
+  writeXStringSet(small_fa, paste0("~/github/jordan-marinimicrobia/data/Bin_fa/", bin), format = "fasta")
+}
 ```
 
 ```{bash}
-busco -i INPUTFASTA -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8 --auto-lineage
+busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8 --auto-lineage
 ```
-
