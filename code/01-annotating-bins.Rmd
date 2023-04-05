@@ -5,6 +5,7 @@ Load required packages.
 ```{r}
 library(tidyverse)
 library(GEOquery)
+library(Biostrings)
 ```
 
 Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
@@ -71,24 +72,19 @@ for (i in 1:6){
 mar_bins <- as.data.frame(mar_bins)
 ```
 
-Add contig and read length together to get bin size
+Use BUSCO (which is similar to CheckM to get size, contamination, etc of bins). One of these steps has to be run on my machine (generating the individual fasta files)
 
 ```{r}
-lengths <- read.csv("~/github/jordan-marinimicrobia/data/contig_lengths.txt", sep = "\t", header = F)
-colnames(lengths) <- c("sample", "contig_name", "length")
-mar_bins <- read.csv("~/github/jordan-marinimicrobia/output/all_mar_bins.csv")
-mar_bins$total_length <- NULL
-path <- "~/github/jordan-marinimicrobia/data/Bins/"
+# Get fasta files for each bin
+all <- readDNAStringSet("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus.fna")
+bin1_nms <- read.csv("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/47_sample_bam_bins/47_sample_bam_bin.234", header = F)
+test <- str_detect(all@ranges@NAMES, paste(bin1_nms$V1, collapse = "|"))
+index <- which(test == T)
+test <- all[index]
+writeXStringSet(test, "~/Downloads/test.fa", format = "fasta")
+```
 
-for (i in 1:nrow(mar_bins)){
-  bin_number <- mar_bins$bin[i]
-  folder <- mar_bins$sample[i]
-  pathname <- paste0(path, folder, "/", bin_number)
-  contigs <- read.csv(pathname, header=F)
-  colnames(contigs) <- "contig_name"
-  bin_length <- merge(contigs, lengths)
-  total <- sum(bin_length$length)
-  mar_bins$total_length[i] <- total
-}
+```{bash}
+busco -i INPUTFASTA -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8 --auto-lineage
 ```
 
