@@ -26,6 +26,6 @@ classification <- classification[str_detect(classification$species, "Marinimicro
 # add this classification file to the repo
 write.csv(classification, "~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
 
-# narrow down bin options 
+# narrow down bin options
 ```
 
