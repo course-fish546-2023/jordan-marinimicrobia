@@ -6,6 +6,7 @@ Load required packages.
 library(tidyverse)
 library(GEOquery)
 library(Biostrings)
+library(dplyr)
 ```
 
 Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
@@ -58,8 +59,16 @@ for (i in 1:6){
       all_contigs <- rbind(all_contigs, find_contig)
     }
     
-    # majority has to be Marinimicrobia for me to look at the bin
-    consensus <- names(which.max(table(all_contigs$species)))
+    # majority of ORFs have to be Marinimicrobia for me to look at the bin
+    all_contigs$ORFs <- str_split_fixed(all_contigs$reason, "[ ]", 4)[,3]
+    all_contigs$ORFs_true <- as.numeric(str_split_fixed(all_contigs$ORFs, "[/]", 4)[,1])
+    all_contigs$ORFs_all <- as.numeric(str_split_fixed(all_contigs$ORFs, "[/]", 4)[,2])
+    consensus <- all_contigs %>%
+      group_by(species) %>%
+      summarize(support = sum(ORFs_true))
+    consensus$total <- sum(all_contigs$ORFs_all)
+    consensus <- consensus$species[which(consensus$support > (consensus$total / 2))]
+    
     if (identical(consensus[str_detect(consensus, "Marinimicrobia")], character(0)) == F){
       a <- a + 1
       mar_bins$bin[a] <- binname
