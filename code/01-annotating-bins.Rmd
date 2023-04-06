@@ -92,5 +92,14 @@ for (i in 1:nrow(mar_bins)){
 ```
 
 ```{bash}
-busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8 --auto-lineage
+busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8
 ```
+
+Combine Busco output table with bins summary
+
+```{r}
+busco <- read.delim("~/github/jordan-marinimicrobia/output/batch_summary.txt")
+colnames(busco)[1] <- "bin"
+mar_bins <- merge(mar_bins, busco)
+```
+
