@@ -1,4 +1,4 @@
-*This will be the working document for my project.*
+*This document goes over the steps to annotate and check the metagenome bins for completeness and contamination.*
 
 Load required packages.
 
@@ -37,7 +37,6 @@ classification <- read.csv("~/github/jordan-marinimicrobia/data/CATBAT_all.txt",
 
 # run through each binning method
 bin_path <- "~/github/jordan-marinimicrobia/data/Bins/"
-  
 mar_bins <- NULL
 a <- 0
 
@@ -55,7 +54,8 @@ for (i in 1:6){
     
     for (i in 1:nrow(contig_names)){
       contigname <- contig_names[i,1]
-      find_contig <- classification %>% filter(str_detect(X..contig, contigname))
+      find_contig <- classification %>%
+        filter(str_detect(X..contig, contigname))
       all_contigs <- rbind(all_contigs, find_contig)
     }
     
@@ -75,13 +75,12 @@ for (i in 1:6){
       mar_bins$sample[a] <- bin_method
     }
   }
-  
 }
 
 mar_bins <- as.data.frame(mar_bins)
 ```
 
-Use BUSCO (which is similar to CheckM to get size, contamination, etc of bins). One of these steps has to be run on my machine (generating the individual fasta files)
+Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). One of these steps has to be run on my machine (generating the individual fasta files)
 
 ```{r}
 # Get fasta files for each bin
@@ -100,11 +99,13 @@ for (i in 1:nrow(mar_bins)){
 }
 ```
 
+Run BUSCO
+
 ```{bash}
 busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8
 ```
 
-Combine Busco output table with bins summary
+Combine BUSCO output table with bins summary
 
 ```{r}
 busco <- read.delim("~/github/jordan-marinimicrobia/output/batch_summary.txt")
