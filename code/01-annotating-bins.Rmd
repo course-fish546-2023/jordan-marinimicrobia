@@ -82,7 +82,7 @@ mar_bins <- as.data.frame(mar_bins)
 write.csv(mar_bins, "../output/all_mar_bins.csv")
 ```
 
-Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). One of these steps has to be run on my machine (generating the individual fasta files)
+Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). This is run on my own computer, hence the Google Drive files.
 
 ```{r}
 # Get fasta files for each bin
@@ -101,10 +101,12 @@ for (i in 1:nrow(mar_bins)){
 }
 ```
 
-Run BUSCO
+Run BUSCO on my own computer, has to be done in a dedicated environment. I am using the generic bacteria database to search for single copy marker genes.
 
 ```{bash}
-busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 -m geno -o ~/github/jordan-marinimicrobia/output/busco_outputs -c 8
+conda activate busco
+busco -i github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 \
+-m geno -o github/jordan-marinimicrobia/output/busco_outputs -c 8
 ```
 
 Combine BUSCO output table with bins summary
@@ -113,4 +115,34 @@ Combine BUSCO output table with bins summary
 busco <- read.delim("../output/batch_summary.txt")
 colnames(busco)[1] <- "bin"
 mar_bins <- merge(mar_bins, busco)
+write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 ```
+
+Get sequence length of all the bins and add it to bin summary table
+
+```{r}
+bin_path <- list.files("../data/Bin_fa") # annotated fasta files for each bin
+lengths <- NULL
+
+for (i in 1:length(bin_path)){
+  
+  bin <- bin_path[i]
+  bin_fullname <- paste0("../data/Bin_fa/", bin)
+  
+  lengths$bin[i] <- bin
+  fa <- readDNAStringSet(bin_fullname, format = "fasta")
+  lengths$sum_len[i] <- sum(nchar(fa))
+  
+}
+
+lengths <- as.data.frame(lengths)
+mar_bins <- merge(mar_bins, lengths)
+write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
+```
+
+Get clade names for bins from previously identified 16S. Not all bins will have 16S, so for now some bins will remain unidentified.
+
+```{r}
+
+```
+
