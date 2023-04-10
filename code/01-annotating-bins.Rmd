@@ -26,24 +26,23 @@ classification <- read.csv(paste0(path, "CAT-BAT/1058_P1_2018_585_0.2um/1058_P1_
 classification <- classification[str_detect(classification$species, "Marinimicrobia"),]
 
 # add this classification file to the repo
-write.csv(classification, "~/github/jordan-marinimicrobia/output/CATBAT_marinimicrobia.csv")
+write.csv(classification, "../output/CATBAT_marinimicrobia.csv")
 ```
 
 Now that I have a classification file and my bins, I can find bins where the majority of reads and contigs are Marinimicrobia
 
 ```{r}
 # get Marinimicrobia bins
-classification <- read.csv("~/github/jordan-marinimicrobia/data/CATBAT_all.txt", sep = "\t")
+classification <- read.csv("../data/CATBAT_all.txt", sep = "\t")
 
 # run through each binning method
-bin_path <- "~/github/jordan-marinimicrobia/data/Bins/"
+bin_path <- list.dirs("../data/Bins")
 mar_bins <- NULL
 a <- 0
 
-for (i in 1:6){
+for (i in 2:7){
   
-  bin_method <- list.files(bin_path)[i]
-  pathname <- paste0(bin_path, bin_method, "/")
+  pathname <- paste0(bin_path[i], "/")
   bins <- list.files(pathname)
   
   for (binname in bins){
@@ -84,7 +83,7 @@ Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of
 
 ```{r}
 # Get fasta files for each bin
-mar_bins <- read.csv("~/github/jordan-marinimicrobia/output/all_mar_bins.csv")
+mar_bins <- read.csv("../output/all_mar_bins.csv")
 all <- readDNAStringSet("~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus.fna")
 path <- "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/"
 
@@ -95,7 +94,7 @@ for (i in 1:nrow(mar_bins)){
   small_fa <- str_detect(all@ranges@NAMES, paste(bin_nms$V1, collapse = "|"))
   index <- which(small_fa == T)
   small_fa <- all[index]
-  writeXStringSet(small_fa, paste0("~/github/jordan-marinimicrobia/data/Bin_fa/", bin), format = "fasta")
+  writeXStringSet(small_fa, paste0("../data/Bin_fa/", bin), format = "fasta")
 }
 ```
 
@@ -108,7 +107,7 @@ busco -i ~/github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 -m geno -o
 Combine BUSCO output table with bins summary
 
 ```{r}
-busco <- read.delim("~/github/jordan-marinimicrobia/output/batch_summary.txt")
+busco <- read.delim("../output/batch_summary.txt")
 colnames(busco)[1] <- "bin"
 mar_bins <- merge(mar_bins, busco)
 ```

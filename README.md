@@ -30,4 +30,5 @@ CAT-BAT:
 - information on the organism ID of each contig and read, as well as each gene in each contig and read
 - mar ref db used for CAT
 
-Hash: acc9c03889fc92438025a01f126d510721ecca77
+Hash: 1efa55285fd040142179f15a0538a2053609b0b6
+Generated using shasum on the Google Drive folder
