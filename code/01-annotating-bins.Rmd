@@ -1,4 +1,4 @@
-*This document goes over the steps to annotate and check the metagenome bins for completeness and contamination.*
+*This document goes over the steps to annotate bins with clade names and check the metagenome bins for completeness and contamination.*
 
 Load required packages.
 
@@ -143,6 +143,33 @@ write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 Get clade names for bins from previously identified 16S. Not all bins will have 16S, so for now some bins will remain unidentified.
 
 ```{r}
+meta <- read.csv("../data/reads_to_clades.csv")
+mar_bins <- read.csv("../output/all_mar_bins.csv")
+path <- "../data/Bins/"
 
+mar_bins$clade <- NA
+
+for (i in 1:nrow(mar_bins)){
+  
+  bin_number <- mar_bins$bin[i]
+  folder <- mar_bins$sample[i]
+  bin_pathname <- paste0(path, folder, "/", bin_number)
+  contig_names <- read.csv(bin_pathname, header=F)
+  clade <- NA
+  
+  for (j in 1:nrow(contig_names)){
+    contigname <- contig_names[j,1]
+    find_contig <- meta %>% filter(str_detect(read, contigname))
+    if (nrow(find_contig) > 0){
+      print(find_contig$Clade)
+      clade <- find_contig$Clade[1]
+    }
+    
+  }
+  
+  mar_bins$clade[i] <- clade
+  
+}
+
+write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 ```
-
