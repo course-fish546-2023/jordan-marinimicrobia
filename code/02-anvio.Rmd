@@ -1,0 +1,39 @@
+*This document details visualization in anvio*
+
+Anvio is run in a dedicated environment.
+
+```{bash}
+conda activate anvio
+
+anvi-interactive -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db"
+```
+
+Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
+
+```{r}
+path <- list.dirs("../data/Bins")
+
+for (i in 2:7){
+  
+  DF <- NULL
+  
+  pathname <- path[i]
+  filelist <- list.files(paste0(pathname, "/"))
+  
+  for (filename in filelist){
+    df <- read.csv(paste0(pathname, "/", filename), header = F)
+    df <- as.data.frame(df)
+    colnames(df) <- "read"
+    df$bin <- str_replace(filename, "[.]", "_")
+    DF <- rbind(DF, df) 
+  }
+  
+  write.table(DF, paste0("../output/all_bins/", basename(pathname), ".tsv"), row.names = F, col.names = F, quote = F, sep = "\t")
+  
+}
+```
+
+```{bash}
+anvi-import-collection "/Users/jordini/github/jordan-marinimicrobia/output/all_bins/assembly_bins.tsv" -p "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/Assembly_Only_Profile/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" --contigs-mode -C assembly
+```
+
