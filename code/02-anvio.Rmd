@@ -4,8 +4,6 @@ Anvio is run in a dedicated environment.
 
 ```{bash}
 conda activate anvio
-
-anvi-interactive -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db"
 ```
 
 Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
@@ -25,6 +23,12 @@ for (i in 2:7){
     df <- as.data.frame(df)
     colnames(df) <- "read"
     df$bin <- str_replace(filename, "[.]", "_")
+    if (basename(pathname) == "24_sample_bam_bins"){
+      df$bin <- str_replace(df$bin, "24", "twentyfour")
+    }
+    if (basename(pathname) == "47_sample_bam_bins"){
+      df$bin <- str_replace(df$bin, "47", "fortyseven")
+    }
     DF <- rbind(DF, df) 
   }
   
@@ -33,7 +37,17 @@ for (i in 2:7){
 }
 ```
 
+Import all bins into anvio
+
 ```{bash}
-anvi-import-collection "/Users/jordini/github/jordan-marinimicrobia/output/all_bins/assembly_bins.tsv" -p "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/Assembly_Only_Profile/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" --contigs-mode -C assembly
+# Example for one bin import, change import and -C for each
+
+anvi-import-collection "/Users/jordini/github/jordan-marinimicrobia/output/all_bins/transcriptomes_bam_bins.tsv" -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C transcriptomes
+```
+
+Run interactive browser
+
+```{bash}
+anvi-interactive -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db"
 ```
 
