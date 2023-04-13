@@ -1,0 +1,38 @@
+*This document goes over 16S annotation*
+
+I have already created a tree and put 16S sequences on a phylogenetic tree. This workflow goes through steps to assign 16S reads to clades based on 16S contigs-- in other words, I already have the assembly 16S sequences (contigs) in clades and now I'm trying to classify all 16S reads including those that didn't assemble to clades.
+
+If you need to create a phylogenetic tree using aligned sequences, run RAxML using GUI. Sequences were aligned using Clustal Omega (https://www.ebi.ac.uk/Tools/msa/clustalo/).
+
+```{r, engine=bash}
+/Applications/raxmlGUI.app/Contents/Resources/static/bin/raxml-ng --all --msa Downloads/contigs_and_clades_fixed_modified.fasta --model GTR+G --prefix Downloads/contigs_and_clades_fixed_raxml/contigs_and_clades_fixed_1 --seed 221239 --outgroup AJ430587_Caldithrix_abyssi --bs-metric tbe --tree rand{1} --bs-trees 100
+```
+
+Distance matrix to assign reads to clades
+
+```{r}
+# import fasta
+library(DECIPHER)
+string <- readDNAStringSet("~/Downloads/reads1.fa")
+
+# create distance matrix
+dist <- DistanceMatrix(string, type = "matrix", method = "overlap")
+dist <- as.data.frame(dist)
+index <- which(str_detect(rownames(dist), "16S_rRNA_"))
+dist <- dist[index, -index]
+dist_done <- NULL
+
+# find closest contig to read
+dist_done$closest <- colnames(dist)[apply(dist,1,which.min)]
+dist_done$closest <- str_split_fixed(dist_done$closest, "[_]", 6)[,1]
+dist_done$percent <- apply(dist,1,min)
+dist_done <- as.data.frame(dist_done)
+dist_done$read_name <- rownames(dist_done)
+dist_done <- subset(dist_done, select = c('closest', 'percent', 'read_name'))
+
+# combine with clade data
+clades <- read.csv("~/Downloads/16S_mar/mar_grouped_clades.csv")
+clades$closest <- str_split_fixed(clades$Barcode, "[ ]", 7)[,1]
+total <- merge(dist_done, clades, by="closest")
+```
+
