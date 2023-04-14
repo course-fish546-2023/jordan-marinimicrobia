@@ -13,7 +13,7 @@ Distance matrix to assign reads to clades
 ```{r}
 # import fasta
 library(DECIPHER)
-string <- readDNAStringSet("~/Downloads/reads1.fa")
+string <- readDNAStringSet("~/Downloads/reads2.fa")
 
 # create distance matrix
 dist <- DistanceMatrix(string, type = "matrix", method = "overlap")
@@ -34,5 +34,28 @@ dist_done <- subset(dist_done, select = c('closest', 'percent', 'read_name'))
 clades <- read.csv("~/Downloads/16S_mar/mar_grouped_clades.csv")
 clades$closest <- str_split_fixed(clades$Barcode, "[ ]", 7)[,1]
 total <- merge(dist_done, clades, by="closest")
+
+# get index of reads that require placement on a tree (>12% different)
+index <- which(total$percent > .12)
+for_tree <- total[index,]
+total <- total[-index,]
+
+write.csv(for_tree, "~/Downloads/reads_for_tree2.csv")
+
+overall <- rbind(overall, total)
+write.csv(overall, "../data/reads_to_clades.csv")
+```
+
+Get sequences that need manual curation on a tree
+
+```{r}
+all_seq <- readDNAStringSet("~/Downloads/16S_mar/Mar_16S_all_reads.fa")
+reads_fix <- read.csv("~/Downloads/reads_for_tree.csv")
+reads_fix$name <- str_split_fixed(reads_fix$read_name, "[ ]", 2)[,1]
+
+fix_seq <- str_detect(all_seq@ranges@NAMES, paste(reads_fix$name, collapse = "|"))
+index <- which(fix_seq == T)
+for_tree <- all_seq[index]
+writeXStringSet(for_tree, "~/Downloads/for_tree.fa", format = "fasta")
 ```
 

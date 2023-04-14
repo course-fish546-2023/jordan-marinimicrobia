@@ -7,6 +7,7 @@ library(tidyverse)
 library(GEOquery)
 library(Biostrings)
 library(dplyr)
+library(ggalluvial)
 ```
 
 Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
@@ -173,3 +174,24 @@ for (i in 1:nrow(mar_bins)){
 
 write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 ```
+
+Alluvial plot to check what contigs/reads went where in each binning method using the contig s27.ctg000028l.
+
+```{r}
+# Open file
+alluvial <- read.csv("../output/for_alluvial_plot.csv")
+alluvial <- pivot_longer(alluvial, cols=c(colnames(alluvial)[2:7]), names_to="bin_method", values_to="bin")
+alluvial <- subset(alluvial, is.na(bin) == F)
+alluvial$bin_method <- factor(alluvial$bin_method, levels = c("X47_sample_bam_bins", "short_reads_bam_bins", "transcriptomes_bam_bins",
+  "assembly_plus_bins","assembly_bins","X24_sample_bam_bins"))
+
+ggplot(alluvial,
+       aes(x = bin_method, stratum = bin, alluvium = contig_name,
+           fill = bin, label = bin)) +
+  geom_flow(stat = "alluvium", lode.guidance = "frontback",
+            color = "darkgray") +
+  geom_stratum() +
+  theme_bw() +
+  ggtitle("E03 Long Contig Bins")
+```
+
