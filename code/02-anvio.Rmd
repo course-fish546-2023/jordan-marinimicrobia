@@ -3,7 +3,7 @@
 Anvio is run in a dedicated environment.
 
 ```{bash}
-conda activate anvio
+conda activate anvio-7.1
 ```
 
 Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
@@ -51,3 +51,8 @@ Run interactive browser
 anvi-interactive -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db"
 ```
 
+Dig into "contaminated" bins to see how/why they are contaminated. Reminder that "." is changed to "_" and 24 and 47 are written out in the anvi bin database.
+
+```{bash}
+anvi-refine -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C assembly -b assembly_bin_115
+```
