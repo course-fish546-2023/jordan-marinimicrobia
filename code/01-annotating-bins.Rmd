@@ -160,10 +160,10 @@ for (i in 1:nrow(mar_bins)){
   
   for (j in 1:nrow(contig_names)){
     contigname <- contig_names[j,1]
-    find_contig <- meta %>% filter(str_detect(read, contigname))
+    find_contig <- meta %>% filter(str_detect(read_name, contigname))
     if (nrow(find_contig) > 0){
-      print(find_contig$Clade)
-      clade <- find_contig$Clade[1]
+      print(find_contig$clade)
+      clade <- find_contig$clade[1]
     }
     
   }
