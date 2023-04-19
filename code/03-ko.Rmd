@@ -1,0 +1,57 @@
+*This document details Kegg pathways and creation of the presence/absence plot*
+
+Contigs to push through to the end of my workflow: s11.ctg000012l and s15.ctg000016c.
+
+Get KO annotations and subset for the above contigs
+
+```{r}
+# get data
+ko <- read.table("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus_KO_best_only.txt", sep = "\t", header = T)
+
+ko$contig <- paste0(str_split_fixed(ko$gene_callers_id, "_", 3)[,1], "_", str_split_fixed(ko$gene_callers_id, "_", 3)[,2])
+
+# subset data for now
+ko <- subset(ko, contig == "MG1058_s11.ctg000012l" | contig == "MG1058_s15.ctg000016c")
+```
+
+Annotate contigs with general metabolisms of interest
+
+```{r}
+genes <- read.csv("../data/KO_numbers.csv")
+colnames(genes) <- c("accession", "pathway")
+ko <- merge(ko, genes)
+
+# count how many genes there are of each pathway
+all_paths <- unique(genes$pathway)
+pathway <- NULL
+
+for (one_contig in unique(ko$contig)){
+  ko_small <- subset(ko, contig == one_contig)
+  results <- NULL
+  for (i in 1:length(all_paths)){
+    path <- all_paths[i]
+    results$count[i] <- length(which(ko_small$pathway == path))
+    results$path[i] <- path
+  }
+  results <- as.data.frame(results)
+  results$bin <- one_contig
+  pathway <- rbind(pathway, results)
+}
+
+pathway$presence <- "no"
+index <- which(pathway$count > 0)
+pathway$presence[index] <- "yes"
+```
+
+Plot genes of interest
+
+```{r}
+# presence-absence
+a <- ggplot(pathway, aes(bin, path, fill=presence)) +
+  geom_tile(color="black") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_fill_grey(start = 1, end = 0.5) +
+  theme_bw()
+a
+```
+
