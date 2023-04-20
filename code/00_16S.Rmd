@@ -59,3 +59,27 @@ for_tree <- all_seq[index]
 writeXStringSet(for_tree, "~/Downloads/for_tree.fa", format = "fasta")
 ```
 
+
+Sanity check: put all sequences from 585 m at P1 on a tree
+
+```{r}
+fix_seq <- str_detect(all_seq@ranges@NAMES, "P1_2018_585_0")
+index <- which(fix_seq == T)
+for_tree <- all_seq[index]
+
+for_tree@ranges@NAMES <- str_split_fixed(for_tree@ranges@NAMES, "contig:", 2)[,2]
+for_tree@ranges@NAMES <- str_split_fixed(for_tree@ranges@NAMES, "[|]", 2)[,1]
+for_tree@ranges@NAMES <- paste0("MG1058_", for_tree@ranges@NAMES)
+
+clade_names <- read.csv("../data/reads_to_clades.csv")
+
+for (i in 1:length(for_tree@ranges@NAMES)){
+  read <- for_tree@ranges@NAMES[i]
+  index <- which(clade_names$read_name == read)
+  clade <- clade_names$clade[index]
+  for_tree@ranges@NAMES[i] <- paste0(for_tree@ranges@NAMES[i], "___", clade)
+}
+
+writeXStringSet(for_tree, "~/Downloads/mysample_for_tree.fa", format = "fasta")
+```
+

@@ -175,15 +175,22 @@ for (i in 1:nrow(mar_bins)){
 write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 ```
 
-Alluvial plot to check what contigs/reads went where in each binning method using the contig s27.ctg000028l.
+Alluvial plot to check what contigs/reads went where in each binning method.
+47 Bin 508: P41300E03
+47 Bin 81: Sulfitobacter
+24 Bin 133: unknown, 25% complete
 
 ```{r}
-# Open file
+# open file
 alluvial <- read.csv("../output/for_alluvial_plot.csv")
+
+# choose starting bin
+alluvial <- subset(alluvial, X24_sample_bam_bins == "24_sample_bam_bin.133")
+
 alluvial <- pivot_longer(alluvial, cols=c(colnames(alluvial)[2:7]), names_to="bin_method", values_to="bin")
 alluvial <- subset(alluvial, is.na(bin) == F)
-alluvial$bin_method <- factor(alluvial$bin_method, levels = c("X47_sample_bam_bins", "short_reads_bam_bins", "transcriptomes_bam_bins",
-  "assembly_plus_bins","assembly_bins","X24_sample_bam_bins"))
+alluvial$bin_method <- factor(alluvial$bin_method, levels = c("X24_sample_bam_bins","X47_sample_bam_bins", "short_reads_bam_bins",
+  "transcriptomes_bam_bins","assembly_plus_bins","assembly_bins"))
 
 ggplot(alluvial,
        aes(x = bin_method, stratum = bin, alluvium = contig_name,
@@ -192,6 +199,6 @@ ggplot(alluvial,
             color = "darkgray") +
   geom_stratum() +
   theme_bw() +
-  ggtitle("E03 Long Contig Bins")
+  ggtitle("24 Bin")
 ```
 
