@@ -42,17 +42,25 @@ Import all bins into anvio
 ```{bash}
 # Example for one bin import, change import and -C for each
 
-anvi-import-collection "/Users/jordini/github/jordan-marinimicrobia/output/all_bins/transcriptomes_bam_bins.tsv" -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C transcriptomes
+anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/mar_47.tsv" -p "./Downloads/fortyseven_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C mar
 ```
 
 Run interactive browser
 
 ```{bash}
-anvi-interactive -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db"
+anvi-interactive -p "./Downloads/fortyseven_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db"
 ```
 
 Dig into "contaminated" bins to see how/why they are contaminated. Reminder that "." is changed to "_" and 24 and 47 are written out in the anvi bin database.
 
 ```{bash}
-anvi-refine -p "/Users/jordini/Downloads/PROFILE.db" -c "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C assembly -b assembly_bin_115
+anvi-refine -p "./Downloads/assembly_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C assembly -b assembly_bin_35
 ```
+
+Get summary statistics
+
+```{r}
+summary <- read.table("../output/anvio_outputs/assembly_plus_summary.txt", sep = "\t", header = T)
+summary(summary)
+```
+

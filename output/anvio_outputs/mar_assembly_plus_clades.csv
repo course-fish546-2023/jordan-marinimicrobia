@@ -1,0 +1,31 @@
+bins,total_length,num_contigs,N50,GC_content,percent_completion,percent_redundancy,t_domain,t_phylum,t_class,t_order,t_family,t_genus,t_species,clade
+assembly_plus_bin_109,857803,4,496212,46.67776426,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,S15-B10,UBA2125,UBA2125 sp002329125,P262000D03
+assembly_plus_bin_113,243248,5,48283,41.56422168,38.02816901,4.225352113,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_115,2012000,160,12296,38.57990003,35.21126761,45.07042254,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,GCA-002701945,GCA-002701945 sp012964215,
+assembly_plus_bin_121,4127679,334,12512,36.05215726,63.38028169,95.77464789,Bacteria,Marinisomatota,Marinisomatia,SCGC-AAA003-L08,D37C17,D37C17,D37C17 sp012964845,
+assembly_plus_bin_129,474354,29,19393,38.32571952,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,TCS55,TCS55 sp014382015,
+assembly_plus_bin_13,1380575,20,75149,39.37433067,64.78873239,57.74647887,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,TCS55,TCS55 sp014382015,
+assembly_plus_bin_136,330389,3,216944,41.79816881,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_plus_bin_144,1201877,60,28721,39.00826799,50.70422535,5.633802817,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,GCA-002701945,GCA-002701945 sp012964215,
+assembly_plus_bin_153,1968105,166,11998,34.05355852,26.76056338,59.15492958,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,GCA-002701945,GCA-002701945 sp002701785,
+assembly_plus_bin_160,382582,27,14008,40.57933134,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA1611,GCA-002717915,GCA-002717915 sp002717915,
+assembly_plus_bin_163,3910388,319,12101,37.5945493,47.88732394,91.54929577,Bacteria,Marinisomatota,Marinisomatia,SCGC-AAA003-L08,D37C17,D37C17,,
+assembly_plus_bin_170,540187,43,12182,42.06793051,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA1611,UBA2134,UBA2134 sp002471805,
+assembly_plus_bin_173,2246669,197,11163,37.33216434,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,TCS55,TCS55 sp014382015,
+assembly_plus_bin_179,834812,11,80117,42.63404946,59.15492958,4.225352113,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_188,317380,2,265014,44.70327477,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_209,474936,10,50367,42.88272136,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_214,556856,1,556856,40.58177858,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA8229,UBA8229,UBA8229 sp012964235,
+assembly_plus_bin_216,577602,11,73559,41.16307696,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,,
+assembly_plus_bin_227,1059693,8,325849,42.09882404,64.78873239,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_plus_bin_228,477153,40,12094,39.43860987,0,0,Bacteria,Marinisomatota,Marinisomatia,SCGC-AAA003-L08,D37C17,D37C17,,
+assembly_plus_bin_24,1721549,2,1376323,40.09714244,80.28169014,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA8229,UBA8229,UBA8229 sp002726775,
+assembly_plus_bin_241,348484,5,91648,37.13348262,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,,
+assembly_plus_bin_266,1188699,11,142379,38.83424885,70.42253521,43.66197183,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002436185,PN262000N21
+assembly_plus_bin_30,231508,19,13314,46.32491635,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,S15-B10,UBA2125,UBA2125 sp004124465,
+assembly_plus_bin_39,331534,6,63267,44.25379867,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_41,707916,58,12596,39.50463047,29.57746479,14.08450704,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,TCS55,TCS55 sp002716525,
+assembly_plus_bin_72,624850,47,12793,41.60835016,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,GCA-002701945,GCA-002701945 sp012964215,
+assembly_plus_bin_80,734072,63,11557,37.96914184,0,0,Bacteria,Marinisomatota,Marinisomatia,SCGC-AAA003-L08,D37C17,D37C17,D37C17 sp012964845,
+assembly_plus_bin_85,258946,4,60252,46.34726853,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_plus_bin_88,270753,2,215164,45.83381423,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,S15-B10,UBA2125,,

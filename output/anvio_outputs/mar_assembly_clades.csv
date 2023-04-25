@@ -1,0 +1,17 @@
+﻿bins,total_length,num_contigs,N50,GC_content,percent_completion,percent_redundancy,t_domain,t_phylum,t_class,t_order,t_family,t_genus,t_species,clade
+assembly_bin_100,1380575,20,75149,39.37433067,64.78873239,57.74647887,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,TCS55,TCS55 sp014382015,
+assembly_bin_119,598103,12,73559,41.2516882,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,,
+assembly_bin_124,1721549,2,1376323,40.09714244,80.28169014,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA8229,UBA8229,UBA8229 sp002726775,
+assembly_bin_126,270753,2,215164,45.83381423,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,S15-B10,UBA2125,,
+assembly_bin_16,243248,5,48283,41.56422168,38.02816901,4.225352113,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_bin_23,330389,3,216944,41.79816881,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_bin_28,258946,4,60252,46.34726853,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_bin_50,641229,9,71880,42.48173615,59.15492958,8.450704225,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_bin_52,857803,4,496212,46.67776426,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,S15-B10,UBA2125,UBA2125 sp002329125,P262000D03
+assembly_bin_54,1031667,7,516327,42.07692657,64.78873239,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_bin_56,317380,2,265014,44.70327477,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA2128,UBA2128,UBA2128 sp002471865,P262000D03
+assembly_bin_58,1806818,31,59605,40.07287415,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_bin_6,1345542,15,142379,38.84548493,70.42253521,49.29577465,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002436185,PN262000N21
+assembly_bin_74,867359,22,42705,40.10555733,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,UBA2126 sp002730315,PN262000N21
+assembly_bin_75,556856,1,556856,40.58177858,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,UBA8229,UBA8229,UBA8229 sp012964235,
+assembly_bin_99,282165,3,91648,37.3994921,0,0,Bacteria,Marinisomatota,Marinisomatia,Marinisomatales,TCS55,UBA2126,,

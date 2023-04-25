@@ -1,0 +1,127 @@
+bins	total_length	num_contigs	N50	GC_content	percent_completion	percent_redundancy	t_domain	t_phylum	t_class	t_order	t_family	t_genus	t_species
+assembly_bin_1	240950	4	71906	53.44727833919548	0.0	0.0							
+assembly_bin_10	235763	3	132529	39.404880876552724	0.0	0.0							
+assembly_bin_100	1380575	20	75149	39.37433067054049	64.78873239436619	57.74647887323944	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	TCS55	TCS55 sp014382015
+assembly_bin_101	352262	10	40897	40.12413829620709	0.0	0.0							
+assembly_bin_102	237429	3	97564	33.453245163076666	0.0	0.0							
+assembly_bin_103	544591	13	44560	34.62997862913203	0.0	0.0							
+assembly_bin_104	1083133	8	225552	56.04438483675075	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	UBA12578	UBA12578 sp002729195
+assembly_bin_105	469659	10	54544	59.784642037289814	0.0	0.0							
+assembly_bin_106	236964	6	37986	55.56934736240836	39.436619718309856	1.408450704225352	Bacteria	Acidobacteriota	UBA890	UBA890	UBA890	UBA890	UBA890 sp002722645
+assembly_bin_107	236459	2	128448	46.49620618609712	0.0	0.0							
+assembly_bin_108	265329	6	48115	46.218802833227855	0.0	0.0							
+assembly_bin_109	1892939	25	90687	38.307108599383845	35.2112676056338	11.267605633802816	Bacteria	Nitrospinota	UBA9942	UBA9942	SZUA-224	SZUA-224	SZUA-224 sp003229375
+assembly_bin_11	328578	7	50461	38.95189052763095	50.70422535211268	1.408450704225352	Bacteria	Proteobacteria	Gammaproteobacteria	PS1	Thioglobaceae	Thioglobus	Thioglobus autotrophicus
+assembly_bin_110	706633	14	50828	45.35814496355804	0.0	0.0	Bacteria	Desulfobacterota	Desulfobacteria	Desulfobacterales	UBA2156	UBA2156	UBA2156 sp002328165
+assembly_bin_111	488569	10	47889	39.32964722076988	0.0	0.0							
+assembly_bin_112	352102	6	66676	31.656911694948924	21.12676056338028	0.0							
+assembly_bin_113	1440021	26	62673	65.29526624823049	60.563380281690144	23.943661971830984	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	UBA3125	UBA3125 sp002365325
+assembly_bin_114	248909	4	56429	67.84525468587125	0.0	0.0	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	S20-B6	S20-B6 sp002329075
+assembly_bin_115	1517408	4	605439	40.03287448102886	90.14084507042253	9.859154929577464	Bacteria	Proteobacteria	Gammaproteobacteria	PS1	Thioglobaceae	Thioglobus	
+assembly_bin_116	219112	4	121580	62.88778483354961	0.0	0.0							
+assembly_bin_117	506056	10	53092	40.68750427137973	0.0	0.0	Bacteria	Planctomycetota	Brocadiae	Brocadiales	Scalinduaceae	Scalindua	Scalindua sp001828595
+assembly_bin_118	253787	7	40775	42.20218425192063	36.61971830985915	4.225352112676056	Bacteria	SAR324	SAR324	SAR324	NAC60-12	Arctic96AD-7	Arctic96AD-7 sp000213335
+assembly_bin_119	598103	12	73559	41.25168819557344	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	
+assembly_bin_12	652432	14	52578	52.26468935037762	42.25352112676056	4.225352112676056	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	REDSEA-S09-B13	REDSEA-S09-B13 sp002731295
+assembly_bin_120	950894	22	52312	65.43363461952794	0.0	0.0							
+assembly_bin_121	604073	15	45352	43.24043680974541	0.0	0.0	Bacteria	SAR324	SAR324	SAR324	NAC60-12	Arctic96AD-7	Arctic96AD-7 sp002685535
+assembly_bin_122	670400	14	52080	42.93139248792455	0.0	0.0							
+assembly_bin_123	406552	13	29025	58.36179863688119	0.0	0.0							
+assembly_bin_124	1721549	2	1376323	40.09714243775365	80.28169014084507	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA8229	UBA8229	UBA8229 sp002726775
+assembly_bin_125	3430583	3	3034959	60.45420328521281	100.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	Rhodobacterales	Rhodobacteraceae	Sulfitobacter	Sulfitobacter pontiacus
+assembly_bin_126	270753	2	215164	45.83381422636022	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	S15-B10	UBA2125	
+assembly_bin_13	257065	6	46289	42.511187178054044	0.0	0.0							
+assembly_bin_14	316759	6	51921	53.63881634525575	0.0	0.0							
+assembly_bin_15	312104	9	32670	59.790464060951635	29.577464788732396	1.408450704225352	Bacteria	Proteobacteria	Alphaproteobacteria	UBA11136	UBA11136	UBA11136	UBA11136 sp002686135
+assembly_bin_16	243248	5	48283	41.56422167525618	38.028169014084504	4.225352112676056	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA2128	UBA2128	UBA2128 sp002471865
+assembly_bin_17	233227	7	33635	66.32236472311752	0.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	Sphingomonadales	Sphingomonadaceae	Erythrobacter	Erythrobacter citreus
+assembly_bin_18	225420	5	56447	54.008755919229564	0.0	0.0							
+assembly_bin_19	268600	5	49092	55.170663922837434	0.0	0.0							
+assembly_bin_2	226034	8	31174	41.91116666171709	0.0	0.0							
+assembly_bin_20	340833	5	70060	41.202203805837485	0.0	0.0							
+assembly_bin_21	324487	4	215410	43.83081466606778	0.0	0.0							
+assembly_bin_22	213042	3	113301	39.18168851254511	0.0	0.0							
+assembly_bin_23	330389	3	216944	41.798168813280824	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	UBA2126 sp002730315
+assembly_bin_24	515872	13	38126	60.99710937359686	0.0	0.0							
+assembly_bin_25	297279	5	87184	41.936725368522886	0.0	0.0	Archaea	Thermoplasmatota	Poseidoniia	MGIII	CG-Epi1	CG-Epi1	CG-Epi1 sp002506485
+assembly_bin_26	4623388	97	48095	30.088030967433436	98.59154929577464	281.6901408450704	Bacteria	Proteobacteria	Alphaproteobacteria	Pelagibacterales	Pelagibacteraceae	AAA240-E13	AAA240-E13 sp002690285
+assembly_bin_27	396195	7	71956	53.84541117810585	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	GCA-2726415	
+assembly_bin_28	258946	4	60252	46.34726853229469	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA2128	UBA2128	UBA2128 sp002471865
+assembly_bin_29	331321	2	242071	59.81510512083784	0.0	0.0							
+assembly_bin_3	241219	7	36375	59.70687984954305	39.436619718309856	1.408450704225352	Bacteria	Verrucomicrobiota	Verrucomicrobiae	Pedosphaerales	UBA1096	UBA1096	UBA1096 sp003972865
+assembly_bin_30	352555	8	44964	68.40818270235715	0.0	0.0							
+assembly_bin_31	211089	3	68305	53.933972085099924	38.028169014084504	66.19718309859155	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	GCA-2726415	GCA-2726415 sp014239575
+assembly_bin_32	460202	9	57403	49.85630816279002	0.0	0.0							
+assembly_bin_33	421021	3	247655	63.19555077555615	0.0	0.0	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	UBA3125	
+assembly_bin_34	479590	9	50879	51.500912753094454	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA5680	UBA5680	UBA5680 sp002420425
+assembly_bin_35	1398933	15	349991	65.22142580687206	80.28169014084507	4.225352112676056	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	UBA3125	UBA3125 sp002501135
+assembly_bin_36	279576	7	43471	41.20369101596298	0.0	0.0							
+assembly_bin_37	300124	2	215826	39.484782556068545	0.0	0.0							
+assembly_bin_38	267959	8	39889	39.946990955583196	0.0	0.0							
+assembly_bin_39	517053	5	163889	58.18615689617255	42.10526315789474	0.0	Archaea	Thermoplasmatota	Poseidoniia	MGIII	CG-Epi1	UBA8886	UBA8886 sp002731905
+assembly_bin_4	202663	5	46392	37.76476678450462	0.0	0.0							
+assembly_bin_40	362639	5	90435	49.364455565662496	0.0	0.0							
+assembly_bin_41	1682579	36	52137	38.15720856493537	67.6056338028169	22.535211267605632							
+assembly_bin_42	317685	4	87578	51.12246577078403	0.0	0.0							
+assembly_bin_43	361971	5	66248	52.99773458626322	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	GCA-2726415	
+assembly_bin_44	268373	7	38498	65.3952468879142	0.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	Sphingomonadales	Sphingomonadaceae	Erythrobacter	Erythrobacter citreus
+assembly_bin_45	267101	3	109957	37.78070680403803	0.0	0.0							
+assembly_bin_46	603048	16	40884	56.97577456861593	0.0	0.0							
+assembly_bin_47	350750	5	180199	41.081854275859584	0.0	0.0							
+assembly_bin_48	579892	15	41947	58.835626608451896	50.70422535211268	4.225352112676056	Bacteria	Chloroflexota	Dehalococcoidia	UBA3495	UBA3495	UBA9611	UBA9611 sp002328185
+assembly_bin_49	528102	14	40134	32.48046145623645	0.0	0.0							
+assembly_bin_5	228361	6	39897	39.510266148470144	0.0	0.0							
+assembly_bin_50	641229	9	71880	42.48173615471216	59.15492957746479	8.450704225352112	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA2128	UBA2128	UBA2128 sp002471865
+assembly_bin_51	272662	7	47279	37.99885620605738	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	UBA11654	UBA11654	DTSX01	DTSX01 sp012965065
+assembly_bin_52	857803	4	496212	46.67776425751845	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	S15-B10	UBA2125	UBA2125 sp002329125
+assembly_bin_53	623964	15	45057	56.99634484920364	0.0	0.0							
+assembly_bin_54	1031667	7	516327	42.07692656639881	64.78873239436619	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	UBA2126 sp002730315
+assembly_bin_55	227612	4	49729	40.044728380492735	0.0	0.0							
+assembly_bin_56	317380	2	265014	44.703274773822166	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA2128	UBA2128	UBA2128 sp002471865
+assembly_bin_57	481629	7	106830	64.03292422514788	46.05263157894737	0.0	Archaea	Thermoplasmatota	Poseidoniia	MGIII	CG-Epi1	UBA8886	UBA8886 sp002731655
+assembly_bin_58	1806818	31	59605	40.072874145825196	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	UBA2126 sp002730315
+assembly_bin_59	1082185	9	243524	57.66070567279685	46.478873239436616	1.408450704225352	Bacteria	Proteobacteria	Gammaproteobacteria	Arenicellales	UBA868	UBA12578	UBA12578 sp002729195
+assembly_bin_6	1345542	15	142379	38.84548493322175	70.4225352112676	49.29577464788732	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	UBA2126 sp002436185
+assembly_bin_60	852268	22	42675	65.63548720643948	18.309859154929576	1.408450704225352	Bacteria	Acidobacteriota	Vicinamibacteria	Vicinamibacterales	UBA8438	UBA8438	UBA8438 sp002726085
+assembly_bin_61	269603	7	36762	63.28217685223487	0.0	0.0							
+assembly_bin_62	219068	6	35608	54.85924530481516	0.0	0.0							
+assembly_bin_63	332604	9	39962	37.314376338738384	0.0	0.0							
+assembly_bin_64	797480	14	62474	40.10176234142256	69.01408450704226	7.042253521126761	Bacteria	Planctomycetota	Brocadiae	Brocadiales	Scalinduaceae	Scalindua	Scalindua sp001828595
+assembly_bin_65	381288	11	38597	37.9240626561492	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	PS1	Thioglobaceae	Thioglobus	
+assembly_bin_66	226937	5	59165	47.790379886279425	0.0	0.0	Bacteria	Desulfobacterota	Desulfobacteria	Desulfobacterales	UBA2156	UBA2156	UBA2156 sp002328165
+assembly_bin_67	3415137	4	2471245	60.649752976416806	100.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	Rhodobacterales	Rhodobacteraceae	Sulfitobacter	Sulfitobacter pontiacus
+assembly_bin_68	308182	9	34700	50.13418156462072	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Pseudomonadales	HTCC2089	GCA-002726655	GCA-002726655 sp002726655
+assembly_bin_69	909658	11	133242	30.881596226494405	29.577464788732396	11.267605633802816	Bacteria	Proteobacteria	Alphaproteobacteria	Pelagibacterales	Pelagibacteraceae	AAA240-E13	
+assembly_bin_7	416104	12	33292	60.5983599551391	0.0	0.0	Bacteria	Chloroflexota	Dehalococcoidia	SAR202	UBA11138	UBA2160	UBA2160 sp002328865
+assembly_bin_70	413354	10	46770	40.871126603774556	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	Methylococcales	Methylomonadaceae	OPU3-GD-OMZ	OPU3-GD-OMZ sp012959905
+assembly_bin_71	365226	8	50860	39.60314120283607	49.29577464788732	5.633802816901408	Bacteria	Planctomycetota	Brocadiae	Brocadiales	Scalinduaceae	Scalindua	Scalindua sp001828595
+assembly_bin_72	693262	14	65843	63.70366444783247	0.0	0.0							
+assembly_bin_73	223608	6	37120	49.35107017529325	0.0	0.0							
+assembly_bin_74	867359	22	42705	40.10555733109392	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	UBA2126 sp002730315
+assembly_bin_75	556856	1	556856	40.581778576304	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	UBA8229	UBA8229	UBA8229 sp012964235
+assembly_bin_76	1778601	27	70685	67.92588765714144	63.38028169014085	29.577464788732396	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	S20-B6	S20-B6 sp002329075
+assembly_bin_77	232801	5	41740	29.240401220302843	0.0	0.0							
+assembly_bin_78	418557	8	55821	44.331325929412415	0.0	0.0							
+assembly_bin_79	333344	3	98718	46.05537161892033	0.0	0.0	Bacteria	Desulfobacterota	Desulfobacteria	Desulfobacterales	UBA2156	UBA2156	UBA2156 sp002328165
+assembly_bin_8	351774	6	78101	56.03339638748426	0.0	0.0							
+assembly_bin_80	1816015	30	75135	48.43751536768353	36.61971830985915	1.408450704225352	Bacteria	Proteobacteria	Gammaproteobacteria	Pseudomonadales	HTCC2089	UBA4582	UBA4582 sp002725285
+assembly_bin_81	333428	6	52687	43.67210727650183	0.0	0.0							
+assembly_bin_82	566123	11	60118	56.240185890403495	0.0	0.0							
+assembly_bin_83	385273	9	52904	64.39722408626373	0.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	Sphingomonadales	Sphingomonadaceae	Erythrobacter	Erythrobacter citreus
+assembly_bin_84	310977	7	47523	53.63438049166486	0.0	0.0							
+assembly_bin_85	654972	1	654972	55.208610517679645	0.0	0.0							
+assembly_bin_86	248461	7	40952	34.991830698216795	0.0	0.0							
+assembly_bin_87	266502	7	44156	46.80316523481826	39.436619718309856	2.816901408450704	Bacteria	Chloroflexota	Dehalococcoidia	UBA1151	Bin127	GCA-002725925	GCA-002725925 sp002725925
+assembly_bin_88	235351	3	159567	41.120495483591974	0.0	0.0	Archaea	Thermoplasmatota	Poseidoniia	MGIII	CG-Epi1	CG-Epi1	CG-Epi1 sp002506485
+assembly_bin_89	238411	4	58167	43.44440858860558	0.0	0.0							
+assembly_bin_9	290370	6	46539	32.42287042201303	0.0	0.0							
+assembly_bin_90	797867	18	43555	46.49921940809802	0.0	0.0							
+assembly_bin_91	377565	6	82061	57.30038947208368	0.0	0.0	Bacteria	Verrucomicrobiota	Verrucomicrobiae	Pedosphaerales	UBA1096	UBA1096	
+assembly_bin_92	5869516	158	39536	29.73786553403508	98.59154929577464	692.9577464788732	Bacteria	Proteobacteria	Alphaproteobacteria	Pelagibacterales	Pelagibacteraceae	AAA240-E13	AAA240-E13 sp000513075
+assembly_bin_93	502982	6	260611	58.96297958157757	0.0	0.0							
+assembly_bin_94	914481	20	44245	60.63595050060705	28.169014084507044	1.408450704225352							
+assembly_bin_95	559709	13	42673	39.30324732720562	0.0	0.0	Bacteria	Proteobacteria	Gammaproteobacteria	PS1	Thioglobaceae	UBA2013	UBA2013 sp003978285
+assembly_bin_96	214450	7	54420	41.07141968889569	0.0	0.0							
+assembly_bin_97	282316	7	43760	63.44000600100599	0.0	0.0	Bacteria	Actinobacteriota	Acidimicrobiia	Acidimicrobiales	MedAcidi-G1	UBA3125	UBA3125 sp002365325
+assembly_bin_98	435365	10	46320	29.834604304085172	0.0	0.0	Bacteria	Proteobacteria	Alphaproteobacteria	HIMB59	GCA-002718135	MarineAlpha5-Bin3	MarineAlpha5-Bin3 sp002938255
+assembly_bin_99	282165	3	91648	37.39949209644841	0.0	0.0	Bacteria	Marinisomatota	Marinisomatia	Marinisomatales	TCS55	UBA2126	
