@@ -89,7 +89,7 @@ Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of
 # Get fasta files for each bin
 mar_bins <- read.csv("../output/all_mar_bins.csv")
 all <- readDNAStringSet("~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus.fna")
-path <- "/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/"
+path <- "~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/"
 
 for (i in 1:nrow(mar_bins)){
   bin <- mar_bins$bin[i]

@@ -1,0 +1,174 @@
+---
+title: "05-qslides.qmd"
+format: revealjs
+editor: visual
+---
+
+```{r setup, include = F}
+library(knitr)
+library(tidyverse)
+library(dplyr)
+opts_chunk$set(
+  echo = FALSE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+## Project Goal
+
+Create a presence-absence plot of genes in Marinimicrobia metagenome assembled genomes (MAGs).
+
+Workflow to accomplish this goal:
+
+::: nonincremental
+-   Annotate bins
+-   Visualize bins in anvio
+-   Use Kegg orthologs for gene annotation
+:::
+
+## Initial Data
+
+::: nonincremental
+-   Annotations (Kegg orthologs and annotated fasta files)
+-   Assembly (fasta files and metadata, like bam files and contig lengths)
+-   Bins (list of contigs and reads in each bin)
+-   CAT-BAT (information on organism ID of each read and contig)
+:::
+
+## Bins
+
+The bin files contain the names of the contigs and reads within them.
+
+```{r bins, echo=T, eval=T}
+sulf_bin <- read.csv("../data/Bins/assembly_plus_bins/assembly_plus_bin.4", header=F)
+head(sulf_bin)
+```
+
+I then got the fasta files for each bin in order to get completeness and contamination statistics.
+
+## Bin Annotation
+
+This is part of the code I used to get Marinimicrobia bins using the CAT-BAT annotations of each contig.
+
+```{r, echo=T}
+#| code-line-numbers: "|5-6"
+    consensus <- all_contigs %>%
+      group_by(species) %>%
+      summarize(support = sum(ORFs_true)) %>%
+      filter(species != "no support")
+    index <- which(str_detect(consensus$species, "Marinimicrobia"))
+    consensus$species[index] <- "Marinimicrobia"
+    consensus <- consensus$species[which(consensus$support
+                                         == max(consensus$support))]
+```
+
+## Busco
+
+I used Busco to get completeness and contamination of the bins.
+
+```{bash busco, echo=T}
+conda activate busco
+busco -i github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 \
+-m geno -o github/jordan-marinimicrobia/output/busco_outputs -c 8
+```
+
+Busco results were combined with clade names in a summary table.
+
+```{r busco_results, echo=T, eval=T}
+summary_table <- read.csv("../output/all_mar_bins.csv")
+head(summary_table, 1)
+```
+
+## Anvio
+
+I used Anvio to visualize MAGs (which are the bins) and look at GC content and coverage.
+
+![](images/sulfito_anvio.png)
+
+## Gene Presence-Absence Code
+
+```{r ko, echo=T}
+#| code-line-numbers: "|6,14-16"
+for (one_contig in unique(ko$contig)){
+  ko_small <- subset(ko, contig == one_contig)
+  results <- NULL
+  for (i in 1:length(all_paths)){
+    path <- all_paths[i]
+    results$count[i] <- length(which(ko_small$pathway == path))
+    results$path[i] <- path
+  }
+  results <- as.data.frame(results)
+  results$bin <- one_contig
+  pathway <- rbind(pathway, results)
+}
+
+pathway$presence <- "no"
+index <- which(pathway$count > 0)
+pathway$presence[index] <- "yes"
+```
+
+## Gene Presence-Absence Figure
+
+```{r, eval=T}
+# get data
+ko <- read.table("../../../Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus_KO_best_only.txt", sep = "\t", header = T)
+
+ko$contig <- paste0(str_split_fixed(ko$gene_callers_id, "_", 3)[,1], "_", str_split_fixed(ko$gene_callers_id, "_", 3)[,2])
+
+# subset data for now
+ko <- subset(ko, contig == "MG1058_s11.ctg000012l" | contig == "MG1058_s15.ctg000016c")
+```
+
+```{r, eval=T}
+genes <- read.csv("../data/KO_numbers.csv")
+colnames(genes) <- c("accession", "pathway")
+ko <- merge(ko, genes)
+
+# count how many genes there are of each pathway
+all_paths <- unique(genes$pathway)
+pathway <- NULL
+
+for (one_contig in unique(ko$contig)){
+  ko_small <- subset(ko, contig == one_contig)
+  results <- NULL
+  for (i in 1:length(all_paths)){
+    path <- all_paths[i]
+    results$count[i] <- length(which(ko_small$pathway == path))
+    results$path[i] <- path
+  }
+  results <- as.data.frame(results)
+  results$bin <- one_contig
+  pathway <- rbind(pathway, results)
+}
+
+pathway$presence <- "no"
+index <- which(pathway$count > 0)
+pathway$presence[index] <- "yes"
+```
+
+This shows the presence-absence plot for Sulfitobacter.
+
+```{r, eval=T}
+# presence-absence
+a <- ggplot(pathway, aes(bin, path, fill=presence)) +
+  geom_tile(color="black") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_fill_grey(start = 1, end = 0.5) +
+  theme_bw()
+a
+```
+
+## Next Steps
+
+In the next few weeks, I plan to refine the Sulfitobacter bins and get presence-absence gene plots of the "best" Marinimicrobia bins.
+
+::: nonincremental
+-   Add higher resolution to final presence/absence gene plot
+-   Go through workflow with "best" Marinimicrobia bins
+-   Clean up code and add more explanations of code
+:::

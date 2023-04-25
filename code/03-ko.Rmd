@@ -6,7 +6,7 @@ Get KO annotations and subset for the above contigs
 
 ```{r}
 # get data
-ko <- read.table("/Users/jordini/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus_KO_best_only.txt", sep = "\t", header = T)
+ko <- read.table("../../../Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus_KO_best_only.txt", sep = "\t", header = T)
 
 ko$contig <- paste0(str_split_fixed(ko$gene_callers_id, "_", 3)[,1], "_", str_split_fixed(ko$gene_callers_id, "_", 3)[,2])
 
