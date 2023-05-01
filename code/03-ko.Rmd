@@ -11,7 +11,11 @@ ko <- read.table("../../../Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shar
 ko$contig <- paste0(str_split_fixed(ko$gene_callers_id, "_", 3)[,1], "_", str_split_fixed(ko$gene_callers_id, "_", 3)[,2])
 
 # subset data for now
-ko <- subset(ko, contig == "MG1058_s11.ctg000012l" | contig == "MG1058_s15.ctg000016c")
+ko <- subset(ko, contig == "MG1058_s11.ctg000012l" | contig == "MG1058_s0.ctg000001c" | contig == "MG1058_s285.ctg000300l" | contig == "MG1058_s526.ctg000549c" | contig == "MG1058_s15.ctg000016c" | contig == "MG1058_s273.ctg000288c" | contig == "MG1058_s408.ctg000428c")
+
+sulf11 <- which(ko$contig == "MG1058_s11.ctg000012l" | ko$contig == "MG1058_s0.ctg000001c" | ko$contig == "MG1058_s285.ctg000300l" | ko$contig == "MG1058_s526.ctg000549c")
+ko$bin <- "sulf15"
+ko$bin[sulf11] <- "sulf11"
 ```
 
 Annotate contigs with general metabolisms of interest

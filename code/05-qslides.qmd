@@ -1,5 +1,6 @@
 ---
-title: "05-qslides.qmd"
+title: "Marinimicrobia and Sulfitobacter in an Oxygen Deficient Zone"
+author: "Jordan Winter"
 format: revealjs
 editor: visual
 ---
@@ -81,7 +82,7 @@ Busco results were combined with clade names in a summary table.
 
 ```{r busco_results, echo=T, eval=T}
 summary_table <- read.csv("../output/all_mar_bins.csv")
-head(summary_table, 1)
+kable(head(summary_table, 1))
 ```
 
 ## Anvio

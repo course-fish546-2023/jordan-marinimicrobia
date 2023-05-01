@@ -8,3 +8,5 @@ data/Bins/
 output/all_bins/
 .DS_Store
 code/05-qslides_files/
+output/.DS_Store
+code/rsconnect/
