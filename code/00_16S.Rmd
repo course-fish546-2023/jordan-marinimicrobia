@@ -1,14 +1,37 @@
+---
+title: "00-16S"
+author: "Jordan Winter"
+date: "2023-05-02"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+---
+
+```{r setup, include=F}
+library(tidyverse)
+library(knitr)
+opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Don't evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
 *This document goes over 16S annotation*
 
-I have already created a tree and put 16S sequences on a phylogenetic tree. This workflow goes through steps to assign 16S reads to clades based on 16S contigs-- in other words, I already have the assembly 16S sequences (contigs) in clades and now I'm trying to classify all 16S reads including those that didn't assemble to clades.
-
-If you need to create a phylogenetic tree using aligned sequences, run RAxML using their GUI. Sequences were aligned using Clustal Omega (https://www.ebi.ac.uk/Tools/msa/clustalo/).
-
-FOR SULFITOBACTER:
+# Getting 16S reads
 
 Get all reads for Sulfitobacter
 
-```{r}
+```{r, eval=T}
 tax <- read.csv("~/Downloads/16S_mar/silva_all_reads_resultlist.csv")
 sulf <- subset(tax, lca_tax_slv == "Bacteria;Proteobacteria;Alphaproteobacteria;Rhodobacterales;Rhodobacteraceae;Sulfitobacter;")
 
@@ -16,86 +39,35 @@ fasta <- readDNAStringSet("~/Downloads/16SrRNA_all_reads.fa")
 fasta_names <- sulf$sequence_identifier
 fasta_sulf <- fasta[sapply(fasta_names, function(x) charmatch(x, names(fasta)))]
 writeXStringSet(fasta_sulf, '~/Downloads/sulf_16S_all_reads.fa')
+fasta_sulf
 ```
 
-Run RAxML
+# Aligning sequences
+
+Next, I got Sulfitobacter 16S sequences and outgroups from SILVA. Then I used SSU-align to align the sequences.
+
+```{bash}
+ssu-align sulf_ref_and_mine.fa sulf_align
+ssu-mask sulf_align
+ssu-mask --stk2afa sulf_align
+```
+
+After aligning, I viewed the aligned sequences in AliView to make sure the alignment looked reasonable.
+
+![](../output/sulf_16S_alignment.png)
+
+# Making tree
+
+Run RAxML to make tree. This is an example of what to run, I use the RAxML GUI. I use the GTR gamma model, and initially did not bootstrap to save some time.
 
 ```{r, engine=bash}
 /Applications/raxmlGUI.app/Contents/Resources/static/bin/raxml-ng --all --msa Downloads/contigs_and_clades_fixed_modified.fasta --model GTR+G --prefix Downloads/contigs_and_clades_fixed_raxml/contigs_and_clades_fixed_1 --seed 221239 --outgroup AJ430587_Caldithrix_abyssi --bs-metric tbe --tree rand{1} --bs-trees 100
 ```
 
-Distance matrix to assign reads to clades
+Once I had the maximum likelihood (ML) tree, I visualized it in ITOL (itol.embl.de) and manually curated the reads into their species based on the results.
 
-```{r}
-# import fasta
-library(DECIPHER)
-string <- readDNAStringSet("~/Downloads/reads2.fa")
+ADD IMAGE OF TREE HERE
 
-# create distance matrix
-dist <- DistanceMatrix(string, type = "matrix", method = "overlap")
-dist <- as.data.frame(dist)
-index <- which(str_detect(rownames(dist), "16S_rRNA_"))
-dist <- dist[index, -index]
-dist_done <- NULL
+# Assigning reads to species
 
-# find closest contig to read
-dist_done$closest <- colnames(dist)[apply(dist,1,which.min)]
-dist_done$closest <- str_split_fixed(dist_done$closest, "[_]", 6)[,1]
-dist_done$percent <- apply(dist,1,min)
-dist_done <- as.data.frame(dist_done)
-dist_done$read_name <- rownames(dist_done)
-dist_done <- subset(dist_done, select = c('closest', 'percent', 'read_name'))
-
-# combine with clade data
-clades <- read.csv("~/Downloads/16S_mar/mar_grouped_clades.csv")
-clades$closest <- str_split_fixed(clades$Barcode, "[ ]", 7)[,1]
-total <- merge(dist_done, clades, by="closest")
-
-# get index of reads that require placement on a tree (>12% different)
-index <- which(total$percent > .12)
-for_tree <- total[index,]
-total <- total[-index,]
-
-write.csv(for_tree, "~/Downloads/reads_for_tree2.csv")
-
-overall <- rbind(overall, total)
-write.csv(overall, "../data/reads_to_clades.csv")
-```
-
-Get sequences that need manual curation on a tree
-
-```{r}
-all_seq <- readDNAStringSet("~/Downloads/16S_mar/Mar_16S_all_reads.fa")
-reads_fix <- read.csv("~/Downloads/reads_for_tree.csv")
-reads_fix$name <- str_split_fixed(reads_fix$read_name, "[ ]", 2)[,1]
-
-fix_seq <- str_detect(all_seq@ranges@NAMES, paste(reads_fix$name, collapse = "|"))
-index <- which(fix_seq == T)
-for_tree <- all_seq[index]
-writeXStringSet(for_tree, "~/Downloads/for_tree.fa", format = "fasta")
-```
-
-
-Sanity check: put all sequences from 585 m at P1 on a tree
-
-```{r}
-fix_seq <- str_detect(all_seq@ranges@NAMES, "P1_2018_585_0")
-index <- which(fix_seq == T)
-for_tree <- all_seq[index]
-
-for_tree@ranges@NAMES <- str_split_fixed(for_tree@ranges@NAMES, "contig:", 2)[,2]
-for_tree@ranges@NAMES <- str_split_fixed(for_tree@ranges@NAMES, "[|]", 2)[,1]
-for_tree@ranges@NAMES <- paste0("MG1058_", for_tree@ranges@NAMES)
-
-clade_names <- read.csv("../data/reads_to_clades.csv")
-
-for (i in 1:length(for_tree@ranges@NAMES)){
-  read <- for_tree@ranges@NAMES[i]
-  index <- which(clade_names$read_name == read)
-  clade <- clade_names$clade[index]
-  for_tree@ranges@NAMES[i] <- paste0(for_tree@ranges@NAMES[i], "___", clade)
-}
-
-writeXStringSet(for_tree, "~/Downloads/mysample_for_tree.fa", format = "fasta")
-```
-
+ADD TABLE OF SPECIES HERE WITH SOME STATS
