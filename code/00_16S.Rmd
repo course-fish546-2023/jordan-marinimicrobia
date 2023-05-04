@@ -2,7 +2,23 @@
 
 I have already created a tree and put 16S sequences on a phylogenetic tree. This workflow goes through steps to assign 16S reads to clades based on 16S contigs-- in other words, I already have the assembly 16S sequences (contigs) in clades and now I'm trying to classify all 16S reads including those that didn't assemble to clades.
 
-If you need to create a phylogenetic tree using aligned sequences, run RAxML using GUI. Sequences were aligned using Clustal Omega (https://www.ebi.ac.uk/Tools/msa/clustalo/).
+If you need to create a phylogenetic tree using aligned sequences, run RAxML using their GUI. Sequences were aligned using Clustal Omega (https://www.ebi.ac.uk/Tools/msa/clustalo/).
+
+FOR SULFITOBACTER:
+
+Get all reads for Sulfitobacter
+
+```{r}
+tax <- read.csv("~/Downloads/16S_mar/silva_all_reads_resultlist.csv")
+sulf <- subset(tax, lca_tax_slv == "Bacteria;Proteobacteria;Alphaproteobacteria;Rhodobacterales;Rhodobacteraceae;Sulfitobacter;")
+
+fasta <- readDNAStringSet("~/Downloads/16SrRNA_all_reads.fa")
+fasta_names <- sulf$sequence_identifier
+fasta_sulf <- fasta[sapply(fasta_names, function(x) charmatch(x, names(fasta)))]
+writeXStringSet(fasta_sulf, '~/Downloads/sulf_16S_all_reads.fa')
+```
+
+Run RAxML
 
 ```{r, engine=bash}
 /Applications/raxmlGUI.app/Contents/Resources/static/bin/raxml-ng --all --msa Downloads/contigs_and_clades_fixed_modified.fasta --model GTR+G --prefix Downloads/contigs_and_clades_fixed_raxml/contigs_and_clades_fixed_1 --seed 221239 --outgroup AJ430587_Caldithrix_abyssi --bs-metric tbe --tree rand{1} --bs-trees 100

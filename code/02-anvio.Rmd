@@ -64,3 +64,21 @@ summary <- read.table("../output/anvio_outputs/assembly_plus_summary.txt", sep =
 summary(summary)
 ```
 
+Creating anvio dbs for my bins
+```{bash}
+anvi-gen-contigs-database -f sulf_genomes/assembly_plus_bin_4.fa -o sulfbin4.db
+
+anvi-run-hmms -c sulf_genomes/dbs/sulfbin4.db
+anvi-run-scg-taxonomy -c sulf_genomes/dbs/sulfbin4.db
+anvi-scan-trnas -c sulf_genomes/dbs/sulfbin4.db
+anvi-run-ncbi-cogs -c sulf_genomes/dbs/sulfbin4.db
+anvi-run-kegg-kofams -c sulf_genomes/dbs/sulfbin4.db
+
+anvi-gen-genomes-storage -e sulf-external-genomes.txt \
+                         -o sulf-GENOMES.db
+
+anvi-pan-genome -g sulf-GENOMES.db -n sulfitobacter
+
+anvi-display-pan -g sulf-GENOMES.db -p sulfitobacter/sulfitobacter-PAN.db
+```
+
