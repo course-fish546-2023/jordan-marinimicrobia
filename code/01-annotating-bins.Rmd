@@ -63,15 +63,15 @@ for (i in 2:7){
     all_contigs$ORFs <- str_split_fixed(all_contigs$reason, "[ ]", 4)[,3]
     all_contigs$ORFs_true <- as.numeric(str_split_fixed(all_contigs$ORFs, "[/]", 4)[,1])
     consensus <- all_contigs %>%
-      group_by(genus) %>%
+      group_by(family) %>%
       summarize(support = sum(ORFs_true)) %>%
-      filter(genus != "no support") # only to get all possible Mar bins
-    index <- which(str_detect(consensus$genus, "Sulfitobacter"))
-    consensus$species[index] <- "Sulfitobacter"
-    consensus <- consensus$species[which(consensus$support == max(consensus$support))]
+      filter(family != "no support") # only to get all possible Mar bins
+    index <- which(str_detect(consensus$family, "Roseobacteraceae"))
+    consensus$family[index] <- "Roseobacteraceae"
+    consensus <- consensus$family[which(consensus$support == max(consensus$support))]
     print(consensus)
     
-    if (identical(consensus[str_detect(consensus, "Sulfitobacter")], character(0)) == F){
+    if (identical(consensus[str_detect(consensus, "Roseobacteraceae")], character(0)) == F){
       a <- a + 1
       sulf_bins$bin[a] <- binname
       sulf_bins$sample[a] <- basename(pathname)
@@ -80,7 +80,7 @@ for (i in 2:7){
 }
 
 sulf_bins <- as.data.frame(sulf_bins)
-write.csv(sulf_bins, "../output/all_mar_bins.csv")
+write.csv(sulf_bins, "../output/all_sulf_bins.csv")
 ```
 
 Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). This is run on my own computer, hence the Google Drive files.
