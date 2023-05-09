@@ -42,7 +42,7 @@ Import all bins into anvio
 ```{bash}
 # Example for one bin import, change import and -C for each
 
-anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/47_sample_bam_bins.tsv" -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C fortyseven
+anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/47_sample_bam_bins_secondhalf.tsv" -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C fortyseven_otherhalf
 ```
 
 Run interactive browser

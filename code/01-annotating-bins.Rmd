@@ -1,4 +1,4 @@
-*This document goes over the steps to annotate bins with clade names and check the metagenome bins for completeness and contamination.*
+*This document goes over the steps to check the metagenome bins for completeness and contamination.*
 
 Load required packages.
 
@@ -17,28 +17,28 @@ Import data. Note that this data is not publicly available yet, so I'm getting i
 path <- "~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/"
 ```
 
-Find bins that are Marinimicrobia. These bins are MAGs (metagenome assembled genomes), and I'll find which are Marinimicrobia by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Marinimicrobia.
+Find bins that are Sulfitobacter These bins are MAGs (metagenome assembled genomes), and I'll find which are Sulfitobacter by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Sulfitobacter.
 
 ```{r}
 # open file
 classification <- read.csv(paste0(path, "CAT-BAT/1058_P1_2018_585_0.2um/1058_P1_2018_585_0.2um_assembly_plus.contig2classification_names.txt"), sep = "\t")
 
 # get only those labeled as Marinimicrobia
-classification <- classification[str_detect(classification$species, "Marinimicrobia"),]
+classification <- classification[str_detect(classification$genus, "Sulfitobacter"),]
 
 # add this classification file to the repo
-write.csv(classification, "../output/CATBAT_marinimicrobia.csv")
+write.csv(classification, "../output/CATBAT_sulfitobacter.csv")
 ```
 
-Now that I have a classification file and my bins, I can find bins where the most reads and contigs are Marinimicrobia
+Now that I have a classification file and my bins, I can find bins where the most reads and contigs are Sulfitobacter.
 
 ```{r}
-# get Marinimicrobia bins
+# get Sulfitobacter bins
 classification <- read.csv("../data/CATBAT_all.txt", sep = "\t")
 
 # run through each binning method
 bin_path <- list.dirs("../data/Bins")
-mar_bins <- NULL
+sulf_bins <- NULL
 a <- 0
 
 for (i in 2:7){
@@ -63,24 +63,24 @@ for (i in 2:7){
     all_contigs$ORFs <- str_split_fixed(all_contigs$reason, "[ ]", 4)[,3]
     all_contigs$ORFs_true <- as.numeric(str_split_fixed(all_contigs$ORFs, "[/]", 4)[,1])
     consensus <- all_contigs %>%
-      group_by(species) %>%
+      group_by(genus) %>%
       summarize(support = sum(ORFs_true)) %>%
-      filter(species != "no support") # only to get all possible Mar bins
-    index <- which(str_detect(consensus$species, "Marinimicrobia"))
-    consensus$species[index] <- "Marinimicrobia"
+      filter(genus != "no support") # only to get all possible Mar bins
+    index <- which(str_detect(consensus$genus, "Sulfitobacter"))
+    consensus$species[index] <- "Sulfitobacter"
     consensus <- consensus$species[which(consensus$support == max(consensus$support))]
     print(consensus)
     
-    if (identical(consensus[str_detect(consensus, "Marinimicrobia")], character(0)) == F){
+    if (identical(consensus[str_detect(consensus, "Sulfitobacter")], character(0)) == F){
       a <- a + 1
-      mar_bins$bin[a] <- binname
-      mar_bins$sample[a] <- basename(pathname)
+      sulf_bins$bin[a] <- binname
+      sulf_bins$sample[a] <- basename(pathname)
     }
   }
 }
 
-mar_bins <- as.data.frame(mar_bins)
-write.csv(mar_bins, "../output/all_mar_bins.csv")
+sulf_bins <- as.data.frame(sulf_bins)
+write.csv(sulf_bins, "../output/all_mar_bins.csv")
 ```
 
 Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). This is run on my own computer, hence the Google Drive files.
