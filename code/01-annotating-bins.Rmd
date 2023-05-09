@@ -142,13 +142,13 @@ write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
 Get sequence length of all the bins and add it to bin summary table
 
 ```{r}
-bin_path <- list.files("../data/Bin_fa") # annotated fasta files for each bin
+bin_path <- list.files("../data/Bin_fa_sulf") # annotated fasta files for each bin
 lengths <- NULL
 
 for (i in 1:length(bin_path)){
   
   bin <- bin_path[i]
-  bin_fullname <- paste0("../data/Bin_fa/", bin)
+  bin_fullname <- paste0("../data/Bin_fa_sulf/", bin)
   
   lengths$bin[i] <- bin
   fa <- readDNAStringSet(bin_fullname, format = "fasta")
@@ -157,20 +157,20 @@ for (i in 1:length(bin_path)){
 }
 
 lengths <- as.data.frame(lengths)
-mar_bins <- merge(mar_bins, lengths)
-write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
+sulf_bins <- merge(sulf_bins, lengths)
+write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
 ```
 
 # Create alluvial plot {-}
 
-Alluvial plot to check what contigs/reads went where in each binning method. 47 Bin 508: P41300E03 47 Bin 81: Sulfitobacter 24 Bin 133: unknown, 25% complete
+Create alluvial plot to check what contigs/reads went where in each binning method using 47_sample_bam_bin.81, which is Sulfitobacter. As can be seen in the plot, most binning methods had the same contigs in them.
 
-```{r}
+```{r, eval=T}
 # open file
 alluvial <- read.csv("../output/for_alluvial_plot.csv")
 
 # choose starting bin
-alluvial <- subset(alluvial, X24_sample_bam_bins == "24_sample_bam_bin.133")
+alluvial <- subset(alluvial, X47_sample_bam_bins == "47_sample_bam_bin.81")
 
 alluvial <- pivot_longer(alluvial, cols=c(colnames(alluvial)[2:7]), names_to="bin_method", values_to="bin")
 alluvial <- subset(alluvial, is.na(bin) == F)
@@ -184,5 +184,6 @@ ggplot(alluvial,
             color = "darkgray") +
   geom_stratum() +
   theme_bw() +
-  ggtitle("24 Bin")
+  theme(axis.text.x = element_text(angle = 45, vjust=0.5)) +
+  ggtitle("Sulfitobacter Contigs Using Varied Binning Methods")
 ```
