@@ -2,8 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-data/Bin_fa/*bin.*
-output/busco_outputs/
+data/Bin_fa_mar/*bin.*
+data/Bin_fa_sulf/*bin.*
+output/busco_outputs_mar/
+output/busco_outputs_sulf/
 data/Bins/
 output/all_bins/
 .DS_Store

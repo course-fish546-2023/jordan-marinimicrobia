@@ -1,39 +1,41 @@
-*This document goes over the steps to check the metagenome bins for completeness and contamination.*
+---
+title: "01-annotating-bins"
+author: "Jordan Winter"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+---
 
-Load required packages.
-
-```{r}
+```{r setup, include=F}
 library(tidyverse)
 library(GEOquery)
 library(Biostrings)
 library(dplyr)
 library(ggalluvial)
+library(knitr)
+opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Don't evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
 ```
 
-Import data. Note that this data is not publicly available yet, so I'm getting it from my Google Drive.
+*This document goes over the steps to check the metagenome bins for completeness and contamination.*
+
+# Find bins that are Sulfitobacter {.unnumbered}
+
+These bins are MAGs (metagenome assembled genomes), and I'll find which are Sulfitobacter by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Roseobacteraceae, which is the family Sulfitobacter is in.
 
 ```{r}
-# set path to all data
-path <- "~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/"
-```
-
-Find bins that are Sulfitobacter These bins are MAGs (metagenome assembled genomes), and I'll find which are Sulfitobacter by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Sulfitobacter.
-
-```{r}
-# open file
-classification <- read.csv(paste0(path, "CAT-BAT/1058_P1_2018_585_0.2um/1058_P1_2018_585_0.2um_assembly_plus.contig2classification_names.txt"), sep = "\t")
-
-# get only those labeled as Marinimicrobia
-classification <- classification[str_detect(classification$genus, "Sulfitobacter"),]
-
-# add this classification file to the repo
-write.csv(classification, "../output/CATBAT_sulfitobacter.csv")
-```
-
-Now that I have a classification file and my bins, I can find bins where the most reads and contigs are Sulfitobacter.
-
-```{r}
-# get Sulfitobacter bins
+# open file with all CATBAT results
 classification <- read.csv("../data/CATBAT_all.txt", sep = "\t")
 
 # run through each binning method
@@ -83,41 +85,59 @@ sulf_bins <- as.data.frame(sulf_bins)
 write.csv(sulf_bins, "../output/all_sulf_bins.csv")
 ```
 
+Look at the Sulfitobacter bin output file.
+
+```{r, eval=T}
+sulf_bins <- read.csv("../output/all_sulf_bins.csv")
+kable(head(sulf_bins, 5))
+```
+
+# BUSCO {.unnumbered}
+
 Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). This is run on my own computer, hence the Google Drive files.
 
 ```{r}
 # Get fasta files for each bin
-mar_bins <- read.csv("../output/all_mar_bins.csv")
+sulf_bins <- read.csv("../output/all_sulf_bins.csv")
 all <- readDNAStringSet("~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Assembly/1058_P1_2018_585_0.2um_assembly_plus.fa")
-path <- "~/Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Bins/"
+path <- "../data/Bins/"
 
-for (i in 1:nrow(mar_bins)){
-  bin <- mar_bins$bin[i]
-  bintype <- mar_bins$sample[i]
+for (i in 1:nrow(sulf_bins)){
+  bin <- sulf_bins$bin[i]
+  bintype <- sulf_bins$sample[i]
   bin_nms <- read.csv(paste0(path, bintype, "/", bin), header = F)
   small_fa <- str_detect(all@ranges@NAMES, paste(bin_nms$V1, collapse = "|"))
   index <- which(small_fa == T)
   small_fa <- all[index]
-  writeXStringSet(small_fa, paste0("../data/Bin_fa/", bin), format = "fasta")
+  writeXStringSet(small_fa, paste0("../data/Bin_fa_sulf/", bin), format = "fasta")
 }
+```
+
+Check output fasta files
+
+```{r, eval=T}
+fa <- readDNAStringSet("../data/Bin_fa_sulf/24_sample_bam_bin.11")
+fa
 ```
 
 Run BUSCO on my own computer, has to be done in a dedicated environment. I am using the generic bacteria database to search for single copy marker genes.
 
 ```{bash}
 conda activate busco
-busco -i github/jordan-marinimicrobia/data/Bin_fa -l bacteria_odb10 \
--m geno -o github/jordan-marinimicrobia/output/busco_outputs -c 8
+busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -l bacteria_odb10 \
+-m geno -o github/jordan-marinimicrobia/output/busco_outputs_sulf -c 8
 ```
 
-Combine BUSCO output table with bins summary
+Combine BUSCO output table with bins summary.
 
 ```{r}
 busco <- read.delim("../output/batch_summary.txt")
 colnames(busco)[1] <- "bin"
-mar_bins <- merge(mar_bins, busco)
-write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
+sulf_bins <- merge(sulf_bins, busco)
+write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
 ```
+
+# Add sequence length to bin summary {-}
 
 Get sequence length of all the bins and add it to bin summary table
 
@@ -141,44 +161,9 @@ mar_bins <- merge(mar_bins, lengths)
 write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
 ```
 
-Get clade names for bins from previously identified 16S. Not all bins will have 16S, so for now some bins will remain unidentified.
+# Create alluvial plot {-}
 
-```{r}
-meta <- read.csv("../data/reads_to_clades.csv")
-mar_bins <- read.csv("../output/all_mar_bins.csv")
-path <- "../data/Bins/"
-
-mar_bins$clade <- NA
-
-for (i in 1:nrow(mar_bins)){
-  
-  bin_number <- mar_bins$bin[i]
-  folder <- mar_bins$sample[i]
-  bin_pathname <- paste0(path, folder, "/", bin_number)
-  contig_names <- read.csv(bin_pathname, header=F)
-  clade <- NA
-  
-  for (j in 1:nrow(contig_names)){
-    contigname <- contig_names[j,1]
-    find_contig <- meta %>% filter(str_detect(read_name, contigname))
-    if (nrow(find_contig) > 0){
-      print(find_contig$clade)
-      clade <- find_contig$clade[1]
-    }
-    
-  }
-  
-  mar_bins$clade[i] <- clade
-  
-}
-
-write.csv(mar_bins, "../output/all_mar_bins.csv", row.names = F)
-```
-
-Alluvial plot to check what contigs/reads went where in each binning method.
-47 Bin 508: P41300E03
-47 Bin 81: Sulfitobacter
-24 Bin 133: unknown, 25% complete
+Alluvial plot to check what contigs/reads went where in each binning method. 47 Bin 508: P41300E03 47 Bin 81: Sulfitobacter 24 Bin 133: unknown, 25% complete
 
 ```{r}
 # open file
@@ -201,4 +186,3 @@ ggplot(alluvial,
   theme_bw() +
   ggtitle("24 Bin")
 ```
-

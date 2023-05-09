@@ -1,7 +1,6 @@
 ---
 title: "00-16S"
 author: "Jordan Winter"
-date: "2023-05-02"
 output: 
   html_document:
     theme: cosmo
@@ -14,6 +13,7 @@ output:
 ```{r setup, include=F}
 library(tidyverse)
 library(knitr)
+library(Biostrings)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -25,9 +25,19 @@ opts_chunk$set(
 )
 ```
 
+I have 4 total documents detailing my project. Here are all 4 in order, including this one, the first document:
+
+https://rpubs.com/jwinter2/ssu16s
+
+https://rpubs.com/jwinter2/bin-annotate-01
+
+https://rpubs.com/jwinter2/anvio-02
+
+https://rpubs.com/jwinter2/ko-03
+
 *This document goes over 16S annotation*
 
-# Getting 16S reads
+# Getting 16S reads {-}
 
 Get all reads for Sulfitobacter
 
@@ -42,7 +52,7 @@ writeXStringSet(fasta_sulf, '~/Downloads/sulf_16S_all_reads.fa')
 fasta_sulf
 ```
 
-# Aligning sequences
+# Aligning sequences {-}
 
 Next, I got Sulfitobacter 16S sequences and outgroups from SILVA. Then I used SSU-align to align the sequences.
 
@@ -56,11 +66,11 @@ After aligning, I viewed the aligned sequences in AliView to make sure the align
 
 ![](../output/sulf_16S_alignment.png)
 
-# Making a tree
+# Making a tree {-}
 
 Run RAxML to make tree. This is an example of what to run, I use the RAxML GUI. I use the GTR gamma model, and initially did not bootstrap to save some time.
 
-```{r, engine=bash}
+```{r, engine='bash'}
 /Applications/raxmlGUI.app/Contents/Resources/static/bin/raxml-ng --all --msa Downloads/contigs_and_clades_fixed_modified.fasta --model GTR+G --prefix Downloads/contigs_and_clades_fixed_raxml/contigs_and_clades_fixed_1 --seed 221239 --outgroup AJ430587_Caldithrix_abyssi --bs-metric tbe --tree rand{1} --bs-trees 100
 ```
 
@@ -68,7 +78,7 @@ Once I had the maximum likelihood (ML) tree, I visualized it in ITOL (itol.embl.
 
 ![](../output/sulf-16S.png)
 
-# Plotting Sulfitobacter 16S with depth
+# Plotting Sulfitobacter 16S with depth {-}
 
 Almost all the Sulfitobacter pontiacus was found at P1, the coastal station (still within the oxygen deficient zone), and at 585 m.
 
