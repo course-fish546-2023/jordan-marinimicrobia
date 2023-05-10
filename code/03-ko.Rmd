@@ -26,6 +26,8 @@ opts_chunk$set(
 
 *This document details Kegg pathways and creation of the presence/absence plot*
 
+# Get KO annotations {-}
+
 Contigs to push through to the end of my workflow: s11.ctg000012l and s15.ctg000016c.
 
 Get KO annotations and subset for the above contigs
@@ -43,6 +45,8 @@ sulf11 <- which(ko$contig == "MG1058_s11.ctg000012l" | ko$contig == "MG1058_s0.c
 ko$bin <- "sulf15"
 ko$bin[sulf11] <- "sulf11"
 ```
+
+# Get specific Kegg numbers {-}
 
 Annotate contigs with general metabolisms of interest
 
@@ -72,6 +76,8 @@ pathway$presence <- "no"
 index <- which(pathway$count > 0)
 pathway$presence[index] <- "yes"
 ```
+
+# Presence-absence plot {-}
 
 Plot genes of interest
 

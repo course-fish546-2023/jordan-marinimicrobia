@@ -1598,6 +1598,8 @@ border-radius: 0px;
 
 <p><em>This document details Kegg pathways and creation of the
 presence/absence plot</em></p>
+<div id="get-ko-annotations" class="section level1 unnumbered">
+<h1 class="unnumbered">Get KO annotations</h1>
 <p>Contigs to push through to the end of my workflow: s11.ctg000012l and
 s15.ctg000016c.</p>
 <p>Get KO annotations and subset for the above contigs</p>
@@ -1612,6 +1614,9 @@ ko &lt;- subset(ko, contig == &quot;MG1058_s11.ctg000012l&quot; | contig == &quo
 sulf11 &lt;- which(ko$contig == &quot;MG1058_s11.ctg000012l&quot; | ko$contig == &quot;MG1058_s0.ctg000001c&quot; | ko$contig == &quot;MG1058_s285.ctg000300l&quot; | ko$contig == &quot;MG1058_s526.ctg000549c&quot;)
 ko$bin &lt;- &quot;sulf15&quot;
 ko$bin[sulf11] &lt;- &quot;sulf11&quot;</code></pre>
+</div>
+<div id="get-specific-kegg-numbers" class="section level1 unnumbered">
+<h1 class="unnumbered">Get specific Kegg numbers</h1>
 <p>Annotate contigs with general metabolisms of interest</p>
 <pre class="r"><code>genes &lt;- read.csv(&quot;../data/KO_numbers.csv&quot;)
 colnames(genes) &lt;- c(&quot;accession&quot;, &quot;pathway&quot;)
@@ -1637,6 +1642,9 @@ for (one_contig in unique(ko$contig)){
 pathway$presence &lt;- &quot;no&quot;
 index &lt;- which(pathway$count &gt; 0)
 pathway$presence[index] &lt;- &quot;yes&quot;</code></pre>
+</div>
+<div id="presence-absence-plot" class="section level1 unnumbered">
+<h1 class="unnumbered">Presence-absence plot</h1>
 <p>Plot genes of interest</p>
 <pre class="r"><code># presence-absence
 a &lt;- ggplot(pathway, aes(bin, path, fill=presence)) +
@@ -1645,6 +1653,7 @@ a &lt;- ggplot(pathway, aes(bin, path, fill=presence)) +
   scale_fill_grey(start = 1, end = 0.5) +
   theme_bw()
 a</code></pre>
+</div>
 
 
 

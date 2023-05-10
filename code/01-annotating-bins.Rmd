@@ -89,7 +89,7 @@ Look at the Sulfitobacter bin output file.
 
 ```{r, eval=T}
 sulf_bins <- read.csv("../output/all_sulf_bins.csv")
-kable(head(sulf_bins, 5))
+head(sulf_bins$bin)
 ```
 
 # BUSCO {.unnumbered}
@@ -131,7 +131,7 @@ busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -l bacteria_odb10 \
 Combine BUSCO output table with bins summary.
 
 ```{r}
-busco <- read.delim("../output/batch_summary.txt")
+busco <- read.delim("../output/busco_outputs_sulf/batch_summary.txt")
 colnames(busco)[1] <- "bin"
 sulf_bins <- merge(sulf_bins, busco)
 write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
@@ -159,6 +159,13 @@ for (i in 1:length(bin_path)){
 lengths <- as.data.frame(lengths)
 sulf_bins <- merge(sulf_bins, lengths)
 write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
+```
+
+Look at bins summary table.
+
+```{r, eval=T}
+sulf_bins <- read.csv("../output/all_sulf_bins.csv")
+kable(head(sulf_bins, 5))
 ```
 
 # Create alluvial plot {-}

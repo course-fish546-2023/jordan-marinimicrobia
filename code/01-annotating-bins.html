@@ -1655,43 +1655,9 @@ sulf_bins &lt;- as.data.frame(sulf_bins)
 write.csv(sulf_bins, &quot;../output/all_sulf_bins.csv&quot;)</code></pre>
 <p>Look at the Sulfitobacter bin output file.</p>
 <pre class="r"><code>sulf_bins &lt;- read.csv(&quot;../output/all_sulf_bins.csv&quot;)
-kable(head(sulf_bins, 5))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">X</th>
-<th align="left">bin</th>
-<th align="left">sample</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">24_sample_bam_bin.11</td>
-<td align="left">24_sample_bam_bins</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="left">24_sample_bam_bin.118</td>
-<td align="left">24_sample_bam_bins</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="left">24_sample_bam_bin.134</td>
-<td align="left">24_sample_bam_bins</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="left">24_sample_bam_bin.156</td>
-<td align="left">24_sample_bam_bins</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="left">24_sample_bam_bin.164</td>
-<td align="left">24_sample_bam_bins</td>
-</tr>
-</tbody>
-</table>
+head(sulf_bins$bin)</code></pre>
+<pre><code>## [1] &quot;24_sample_bam_bin.11&quot;  &quot;24_sample_bam_bin.118&quot; &quot;24_sample_bam_bin.134&quot;
+## [4] &quot;24_sample_bam_bin.156&quot; &quot;24_sample_bam_bin.164&quot; &quot;24_sample_bam_bin.226&quot;</code></pre>
 </div>
 <div id="busco" class="section level1 unnumbered">
 <h1 class="unnumbered">BUSCO</h1>
@@ -1735,7 +1701,7 @@ single copy marker genes.</p>
 busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -l bacteria_odb10 \
 -m geno -o github/jordan-marinimicrobia/output/busco_outputs_sulf -c 8</code></pre>
 <p>Combine BUSCO output table with bins summary.</p>
-<pre class="r"><code>busco &lt;- read.delim(&quot;../output/batch_summary.txt&quot;)
+<pre class="r"><code>busco &lt;- read.delim(&quot;../output/busco_outputs_sulf/batch_summary.txt&quot;)
 colnames(busco)[1] &lt;- &quot;bin&quot;
 sulf_bins &lt;- merge(sulf_bins, busco)
 write.csv(sulf_bins, &quot;../output/all_sulf_bins.csv&quot;, row.names = F)</code></pre>
@@ -1761,6 +1727,134 @@ for (i in 1:length(bin_path)){
 lengths &lt;- as.data.frame(lengths)
 sulf_bins &lt;- merge(sulf_bins, lengths)
 write.csv(sulf_bins, &quot;../output/all_sulf_bins.csv&quot;, row.names = F)</code></pre>
+<p>Look at bins summary table.</p>
+<pre class="r"><code>sulf_bins &lt;- read.csv(&quot;../output/all_sulf_bins.csv&quot;)
+kable(head(sulf_bins, 5))</code></pre>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="1%" />
+<col width="10%" />
+<col width="8%" />
+<col width="4%" />
+<col width="3%" />
+<col width="6%" />
+<col width="6%" />
+<col width="4%" />
+<col width="5%" />
+<col width="7%" />
+<col width="6%" />
+<col width="7%" />
+<col width="11%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">bin</th>
+<th align="right">X</th>
+<th align="left">sample</th>
+<th align="left">Dataset</th>
+<th align="right">Complete</th>
+<th align="right">Single</th>
+<th align="right">Duplicated</th>
+<th align="right">Fragmented</th>
+<th align="right">Missing</th>
+<th align="right">n_markers</th>
+<th align="right">Scaffold.N50</th>
+<th align="right">Contigs.N50</th>
+<th align="left">Percent.gaps</th>
+<th align="right">Number.of.scaffolds</th>
+<th align="right">sum_len</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">24_sample_bam_bin.11</td>
+<td align="right">1</td>
+<td align="left">24_sample_bam_bins</td>
+<td align="left">bacteria_odb10</td>
+<td align="right">12.1</td>
+<td align="right">11.3</td>
+<td align="right">0.8</td>
+<td align="right">2.4</td>
+<td align="right">85.5</td>
+<td align="right">124</td>
+<td align="right">16860</td>
+<td align="right">16860</td>
+<td align="left">0.000%</td>
+<td align="right">34</td>
+<td align="right">576810</td>
+</tr>
+<tr class="even">
+<td align="left">24_sample_bam_bin.118</td>
+<td align="right">2</td>
+<td align="left">24_sample_bam_bins</td>
+<td align="left">bacteria_odb10</td>
+<td align="right">0.8</td>
+<td align="right">0.8</td>
+<td align="right">0.0</td>
+<td align="right">1.6</td>
+<td align="right">97.6</td>
+<td align="right">124</td>
+<td align="right">11016</td>
+<td align="right">11016</td>
+<td align="left">0.000%</td>
+<td align="right">82</td>
+<td align="right">913463</td>
+</tr>
+<tr class="odd">
+<td align="left">24_sample_bam_bin.134</td>
+<td align="right">3</td>
+<td align="left">24_sample_bam_bins</td>
+<td align="left">bacteria_odb10</td>
+<td align="right">14.5</td>
+<td align="right">13.7</td>
+<td align="right">0.8</td>
+<td align="right">4.8</td>
+<td align="right">80.7</td>
+<td align="right">124</td>
+<td align="right">12734</td>
+<td align="right">12734</td>
+<td align="left">0.000%</td>
+<td align="right">48</td>
+<td align="right">605550</td>
+</tr>
+<tr class="even">
+<td align="left">24_sample_bam_bin.156</td>
+<td align="right">4</td>
+<td align="left">24_sample_bam_bins</td>
+<td align="left">bacteria_odb10</td>
+<td align="right">32.3</td>
+<td align="right">24.2</td>
+<td align="right">8.1</td>
+<td align="right">4.8</td>
+<td align="right">62.9</td>
+<td align="right">124</td>
+<td align="right">11009</td>
+<td align="right">11009</td>
+<td align="left">0.000%</td>
+<td align="right">210</td>
+<td align="right">2297295</td>
+</tr>
+<tr class="odd">
+<td align="left">24_sample_bam_bin.164</td>
+<td align="right">5</td>
+<td align="left">24_sample_bam_bins</td>
+<td align="left">bacteria_odb10</td>
+<td align="right">8.9</td>
+<td align="right">8.1</td>
+<td align="right">0.8</td>
+<td align="right">1.6</td>
+<td align="right">89.5</td>
+<td align="right">124</td>
+<td align="right">10322</td>
+<td align="right">10322</td>
+<td align="left">0.000%</td>
+<td align="right">25</td>
+<td align="right">265173</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="create-alluvial-plot" class="section level1 unnumbered">
 <h1 class="unnumbered">Create alluvial plot</h1>

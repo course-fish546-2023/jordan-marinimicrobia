@@ -1,8 +1,10 @@
 # jordan-marinimicrobia
 
+Rpubs: https://rpubs.com/jwinter2/ssu16s 
+
 Slides: https://rpubs.com/jwinter2/qslides05
 
-For this project, I'll be working with MAGs (metagenome-assembled genomes). Specifically, I'll be looking at Marinimicrobia, an uncultured phylum of marine bacteria involved in global biogeochemical cycling. I plan to do a presence-absence gene analysis of the different clades of this phylum.
+For this project, I'll be working with MAGs (metagenome-assembled genomes). Specifically, I'll be looking at Sulfitobacter pontiacus, a sulfur oxidizing species of marine bacteria. I plan to do a presence-absence gene analysis of the different clades of this phylum.
 
 *End goal: presence-absence plot. This entails the following workflow:*
 - Annotate bins (which are Marinimicrobia, which bins to use, CheckM/Busco statistics, which bin is which clade)

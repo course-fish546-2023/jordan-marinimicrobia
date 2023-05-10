@@ -32,6 +32,8 @@ Anvio is run in a dedicated environment.
 conda activate anvio-7.1
 ```
 
+# Get bin info {-}
+
 Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
 
 ```{r}
@@ -63,34 +65,55 @@ for (i in 2:7){
 }
 ```
 
-Import all bins into anvio
+Examine tsv files.
+
+```{r, eval=T}
+tsv_output <- read.csv("../output/all_bins/assembly_bins.tsv", sep = "\t")
+kable(head(tsv_output, 5))
+```
+
+# Import bins into anvio {-}
+
+Get the bins into the anvio database already created.
 
 ```{bash}
 # Example for one bin import, change import and -C for each
-
-anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/47_sample_bam_bins_secondhalf.tsv" -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C fortyseven_otherhalf
+anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/short_reads_bam_bins.tsv" -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db" --contigs-mode -C shortreads
 ```
 
-Run interactive browser
+# Run interactive browser {-}
 
 ```{bash}
 anvi-interactive -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db"
 ```
 
+Example of what the interactive browser looks like with bins.
+
+![Anvio interactive browser](../output/anvi-interactive.png)
+
+# Refine bins {-}
+
 Dig into "contaminated" bins to see how/why they are contaminated. Reminder that "." is changed to "_" and 24 and 47 are written out in the anvi bin database.
 
 ```{bash}
-anvi-refine -p "./Downloads/assembly_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C assembly -b assembly_bin_35
+anvi-refine -p "./Downloads/assembly_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C shortreads -b short_reads_bam_bin_163
 ```
 
-Get summary statistics
+Example of a contaminated bin.
 
-```{r}
+![Anvio interactive display of a contaminated bin](../output/contaminated-bin.png)
+
+# Get summary statistics {-}
+
+```{r, eval=T}
 summary <- read.table("../output/anvio_outputs/assembly_plus_summary.txt", sep = "\t", header = T)
 summary(summary)
 ```
 
+# Creating pangenome {-}
+
 Creating anvio dbs for my bins
+
 ```{bash}
 anvi-gen-contigs-database -f sulf_genomes/assembly_plus_bin_4.fa -o sulfbin4.db
 
@@ -108,3 +131,6 @@ anvi-pan-genome -g sulf-GENOMES.db -n sulfitobacter
 anvi-display-pan -g sulf-GENOMES.db -p sulfitobacter/sulfitobacter-PAN.db
 ```
 
+Pangenome visualization.
+
+![Sulfitobacter pangenome](../output/sulf_pan.png)
