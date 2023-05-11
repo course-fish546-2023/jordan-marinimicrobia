@@ -1602,7 +1602,30 @@ order, including this one, the first document:</p>
 <p><a href="https://rpubs.com/jwinter2/bin-annotate-01" class="uri">https://rpubs.com/jwinter2/bin-annotate-01</a></p>
 <p><a href="https://rpubs.com/jwinter2/anvio-02" class="uri">https://rpubs.com/jwinter2/anvio-02</a></p>
 <p><a href="https://rpubs.com/jwinter2/ko-03" class="uri">https://rpubs.com/jwinter2/ko-03</a></p>
+<div id="overview-of-project" class="section level1 unnumbered">
+<h1 class="unnumbered">Overview of project</h1>
+<p>I am working with metagenomic data from the Eastern Tropical North
+Pacific oxygen deficient zone (ODZ). My data comes from 585 m, a region
+within the oxygen deficient zone with abundant Marinimicrobia and
+Sulfitobacter. For this project, I created a pangenome of Sulfitobacter
+and a presence-absence plot of genes. Sulfitobacter pontiacus is a
+cultured species of sulfur oxidizing bacteria that has previously been
+described as aerobic, yet it is found within the ODZ. This workflow,
+while for Sulfitobacter, can be adapted to work with Marinimicrobia, an
+uncultured phylum of bacteria involved in nitrogen and sulfur cycling in
+extreme environments.</p>
+<p>Workflow of code:</p>
+<ul>
+<li>00_16S: Check that Sulfitobacter sequences are Sulfitobacter
+pontiacus by aligning 16S sequences and making a phylogenetic tree</li>
+<li>01-annotating-bins: Get completion, redundancy, and other statistics
+on different binning methods for Sulfitobacter</li>
+<li>02-anvio: Create pangenome of Sulfitobacter in anvio using my bins
+and reference genomes</li>
+<li>03-ko: Create presence-absence plots using Kegg orthologs</li>
+</ul>
 <p><em>This document goes over 16S annotation</em></p>
+</div>
 <div id="getting-16s-reads" class="section level1 unnumbered">
 <h1 class="unnumbered">Getting 16S reads</h1>
 <p>Get all reads for Sulfitobacter</p>

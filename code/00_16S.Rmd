@@ -35,6 +35,17 @@ https://rpubs.com/jwinter2/anvio-02
 
 https://rpubs.com/jwinter2/ko-03
 
+# Overview of project {-}
+
+I am working with metagenomic data from the Eastern Tropical North Pacific oxygen deficient zone (ODZ). My data comes from 585 m, a region within the oxygen deficient zone with abundant Marinimicrobia and Sulfitobacter. For this project, I created a pangenome of Sulfitobacter and a presence-absence plot of genes. Sulfitobacter pontiacus is a cultured species of sulfur oxidizing bacteria that has previously been described as aerobic, yet it is found within the ODZ. This workflow, while for Sulfitobacter, can be adapted to work with Marinimicrobia, an uncultured phylum of bacteria involved in nitrogen and sulfur cycling in extreme environments.
+
+Workflow of code:
+
+- 00_16S: Check that Sulfitobacter sequences are Sulfitobacter pontiacus by aligning 16S sequences and making a phylogenetic tree
+- 01-annotating-bins: Get completion, redundancy, and other statistics on different binning methods for Sulfitobacter
+- 02-anvio: Create pangenome of Sulfitobacter in anvio using my bins and reference genomes
+- 03-ko: Create presence-absence plots using Kegg orthologs
+
 *This document goes over 16S annotation*
 
 # Getting 16S reads {-}
