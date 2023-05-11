@@ -37,8 +37,10 @@ conda activate anvio-7.1
 Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
 
 ```{r}
+# get all bin directories
 path <- list.dirs("../data/Bins")
 
+# for loop for each binning method
 for (i in 2:7){
   
   DF <- NULL
@@ -46,17 +48,21 @@ for (i in 2:7){
   pathname <- path[i]
   filelist <- list.files(paste0(pathname, "/"))
   
+  # get list of all contigs and reads for all bins into 1 tsv file
   for (filename in filelist){
     df <- read.csv(paste0(pathname, "/", filename), header = F)
     df <- as.data.frame(df)
     colnames(df) <- "read"
     df$bin <- str_replace(filename, "[.]", "_")
+    
+    # change names if a number is at the beginning of the bin name
     if (basename(pathname) == "24_sample_bam_bins"){
       df$bin <- str_replace(df$bin, "24", "twentyfour")
     }
     if (basename(pathname) == "47_sample_bam_bins"){
       df$bin <- str_replace(df$bin, "47", "fortyseven")
     }
+    
     DF <- rbind(DF, df) 
   }
   
@@ -87,7 +93,7 @@ anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/short_rea
 anvi-interactive -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db"
 ```
 
-Example of what the interactive browser looks like with bins.
+Example of what the interactive browser looks like with bins. Anvio calculates statistics like completion and redundancy for each bin.
 
 ![Anvio interactive browser](../output/anvi-interactive.png)
 
@@ -99,11 +105,13 @@ Dig into "contaminated" bins to see how/why they are contaminated. Reminder that
 anvi-refine -p "./Downloads/assembly_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C shortreads -b short_reads_bam_bin_163
 ```
 
-Example of a contaminated bin.
+Example of a contaminated bin. The coverage is not consistent, there are many branches within the clustering algorithm anvio uses to group sequences, and there are many duplicated single copy core genes.
 
 ![Anvio interactive display of a contaminated bin](../output/contaminated-bin.png)
 
 # Get summary statistics {-}
+
+I used anvi-interactive to get a summary of all bins in each bin collection. This is an example output file that contains information on size of bins, contamination, etc.
 
 ```{r, eval=T}
 summary <- read.table("../output/anvio_outputs/assembly_plus_summary.txt", sep = "\t", header = T)
@@ -112,7 +120,7 @@ summary(summary)
 
 # Creating pangenome {-}
 
-Creating anvio dbs for my bins
+Create anvio dbs for my bins and annotate them with COG, Kegg, HMMs, and tRNAs. Use the interactive database to visualize the pangenome, and find variable regions of the Sulfitobacter genome. These I will dive into further in the next section.
 
 ```{bash}
 anvi-gen-contigs-database -f sulf_genomes/assembly_plus_bin_4.fa -o sulfbin4.db
