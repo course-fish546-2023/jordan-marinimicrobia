@@ -89,11 +89,12 @@ ko_of_interest <- subset(ko_of_interest, pathway == "terminal oxidase")
 index <- str_detect(genes$KOfam_ACC, paste(ko_of_interest$ko, collapse = "|"))
 genes_small <- genes[which(index),]
 
-ggplot(genes_small) +
+a <- ggplot(genes_small) +
   geom_bar(aes(KEGG_Module, fill = bin_name)) +
   theme_bw() +
   facet_wrap(~genome_name) +
   scale_x_discrete(guide = guide_axis(angle = 90))
+a
 ```
 
 # Presence-absence plot for everything
@@ -105,5 +106,6 @@ summary <- subset(summary, KOfam_ACC != "")
 
 test <- as.matrix(table(summary$genome_name, summary$KOfam_ACC))
 
-pheatmap(test, show_colnames=F)
+a <- pheatmap(test, show_colnames=F)
+a
 ```
