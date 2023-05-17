@@ -137,7 +137,7 @@ sulf_bins <- merge(sulf_bins, busco)
 write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
 ```
 
-# Add sequence length to bin summary {-}
+# Add sequence length to bin summary {.unnumbered}
 
 Get sequence length of all the bins and add it to bin summary table
 
@@ -168,7 +168,7 @@ sulf_bins <- read.csv("../output/all_sulf_bins.csv")
 kable(head(sulf_bins, 5))
 ```
 
-# Create alluvial plot {-}
+# Create alluvial plot {.unnumbered}
 
 Create alluvial plot to check what contigs/reads went where in each binning method using 47_sample_bam_bin.81, which is Sulfitobacter. As can be seen in the plot, most binning methods had the same contigs in them.
 

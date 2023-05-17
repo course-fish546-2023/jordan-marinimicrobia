@@ -13,6 +13,7 @@ output:
 ```{r setup, include=F}
 library(tidyverse)
 library(knitr)
+library(pheatmap)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -28,30 +29,14 @@ opts_chunk$set(
 
 # Get KO annotations {-}
 
-Contigs to push through to the end of my workflow: s11.ctg000012l and s15.ctg000016c.
+Get Kegg orthologs for variable regions in the pangenome. This is done in anvio by using the "summarize" option in anvi interactive.
 
-Get KO annotations and subset for the above contigs
+# Get specific Kegg pathways {-}
 
-```{r}
-# get data
-ko <- read.table("../../../Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Annotations/1058_P1_2018_585_0.2um_assembly_plus_KO_best_only.txt", sep = "\t", header = T)
-
-ko$contig <- paste0(str_split_fixed(ko$gene_callers_id, "_", 3)[,1], "_", str_split_fixed(ko$gene_callers_id, "_", 3)[,2])
-
-# subset data for now
-ko <- subset(ko, contig == "MG1058_s11.ctg000012l" | contig == "MG1058_s0.ctg000001c" | contig == "MG1058_s285.ctg000300l" | contig == "MG1058_s526.ctg000549c" | contig == "MG1058_s15.ctg000016c" | contig == "MG1058_s273.ctg000288c" | contig == "MG1058_s408.ctg000428c")
-
-sulf11 <- which(ko$contig == "MG1058_s11.ctg000012l" | ko$contig == "MG1058_s0.ctg000001c" | ko$contig == "MG1058_s285.ctg000300l" | ko$contig == "MG1058_s526.ctg000549c")
-ko$bin <- "sulf15"
-ko$bin[sulf11] <- "sulf11"
-```
-
-# Get specific Kegg numbers {-}
-
-Annotate contigs with general metabolisms of interest
+Annotate contigs with general metabolisms of interest.
 
 ```{r}
-genes <- read.csv("../data/KO_numbers.csv")
+genes <- read.csv("../data/KO_numbers_path.csv")
 colnames(genes) <- c("accession", "pathway")
 ko <- merge(ko, genes)
 
@@ -77,7 +62,7 @@ index <- which(pathway$count > 0)
 pathway$presence[index] <- "yes"
 ```
 
-# Presence-absence plot {-}
+# Presence-absence plot of pathways {-}
 
 Plot genes of interest
 
@@ -91,3 +76,34 @@ a <- ggplot(pathway, aes(bin, path, fill=presence)) +
 a
 ```
 
+# Plot of specific aerobic genes {-}
+
+```{r, eval=T}
+genes <- read.csv("~/Downloads/sulf_genomes/sulfitobacter/SUMMARY_variable_region/sulfitobacter_gene_clusters_summary.txt", sep = "\t")
+
+ko_of_interest <- read.csv("~/Downloads/sulf_genomes/KO_of_interest.csv")
+
+# choose genes you want to plot
+ko_of_interest <- subset(ko_of_interest, pathway == "terminal oxidase")
+
+index <- str_detect(genes$KOfam_ACC, paste(ko_of_interest$ko, collapse = "|"))
+genes_small <- genes[which(index),]
+
+ggplot(genes_small) +
+  geom_bar(aes(KEGG_Module, fill = bin_name)) +
+  theme_bw() +
+  facet_wrap(~genome_name) +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+
+# Presence-absence plot for everything
+
+```{r, eval=T}
+summary <- read.csv("~/Downloads/sulf_genomes/combined/pangenome/SUMMARY_variable/pangenome_gene_clusters_summary.txt", sep = "\t")
+summary <- summary[,c("genome_name", "KOfam_ACC")]
+summary <- subset(summary, KOfam_ACC != "")
+
+test <- as.matrix(table(summary$genome_name, summary$KOfam_ACC))
+
+pheatmap(test, show_colnames=F)
+```

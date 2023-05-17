@@ -65,12 +65,11 @@ fasta_sulf
 
 # Aligning sequences {-}
 
-Next, I got Sulfitobacter 16S sequences and outgroups from SILVA. Then I used SSU-align to align the sequences.
+Next, I got Sulfitobacter 16S sequences and outgroups from SILVA. Then I used SSU-align to align the sequences. Use --gapthresh 0.9 if you want to clean up the gaps.
 
 ```{bash}
 ssu-align sulf_ref_and_mine.fa sulf_align
-ssu-mask sulf_align
-ssu-mask --stk2afa sulf_align
+ssu-mask sulf_align --afa
 ```
 
 After aligning, I viewed the aligned sequences in AliView to make sure the alignment looked reasonable. I exported the AliView file to change the . to - in the fasta file (the . just indicated areas that could be misaligned, so a - was put there to not "count" those towards the ML tree).
