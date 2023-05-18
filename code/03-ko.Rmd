@@ -14,6 +14,7 @@ output:
 library(tidyverse)
 library(knitr)
 library(pheatmap)
+library(DT)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -27,56 +28,18 @@ opts_chunk$set(
 
 *This document details Kegg pathways and creation of the presence/absence plot*
 
-# Get KO annotations {-}
+# Get summary stats on genomes {.unnumbered}
 
-Get Kegg orthologs for variable regions in the pangenome. This is done in anvio by using the "summarize" option in anvi interactive.
+Get Kegg orthologs for all regions in the pangenome. This is done in anvio by using the "summarize" option in anvi interactive.
 
-# Get specific Kegg pathways {-}
+```{r, eval=T}
+summary <- read.csv("../output/pangenome_gene_clusters_summary.txt", sep = "\t")
+summary <- summary[,3:18]
 
-Annotate contigs with general metabolisms of interest.
-
-```{r}
-genes <- read.csv("../data/KO_numbers_path.csv")
-colnames(genes) <- c("accession", "pathway")
-ko <- merge(ko, genes)
-
-# count how many genes there are of each pathway
-all_paths <- unique(genes$pathway)
-pathway <- NULL
-
-for (one_contig in unique(ko$contig)){
-  ko_small <- subset(ko, contig == one_contig)
-  results <- NULL
-  for (i in 1:length(all_paths)){
-    path <- all_paths[i]
-    results$count[i] <- length(which(ko_small$pathway == path))
-    results$path[i] <- path
-  }
-  results <- as.data.frame(results)
-  results$bin <- one_contig
-  pathway <- rbind(pathway, results)
-}
-
-pathway$presence <- "no"
-index <- which(pathway$count > 0)
-pathway$presence[index] <- "yes"
+datatable(summary)
 ```
 
-# Presence-absence plot of pathways {-}
-
-Plot genes of interest
-
-```{r}
-# presence-absence
-a <- ggplot(pathway, aes(bin, path, fill=presence)) +
-  geom_tile(color="black") +
-  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
-  scale_fill_grey(start = 1, end = 0.5) +
-  theme_bw()
-a
-```
-
-# Plot of specific aerobic genes {-}
+# Plot of specific aerobic genes {.unnumbered}
 
 ```{r, eval=T}
 genes <- read.csv("~/Downloads/sulf_genomes/sulfitobacter/SUMMARY_variable_region/sulfitobacter_gene_clusters_summary.txt", sep = "\t")
@@ -89,23 +52,53 @@ ko_of_interest <- subset(ko_of_interest, pathway == "terminal oxidase")
 index <- str_detect(genes$KOfam_ACC, paste(ko_of_interest$ko, collapse = "|"))
 genes_small <- genes[which(index),]
 
-a <- ggplot(genes_small) +
+genes <- ggplot(genes_small) +
   geom_bar(aes(KEGG_Module, fill = bin_name)) +
   theme_bw() +
   facet_wrap(~genome_name) +
   scale_x_discrete(guide = guide_axis(angle = 90))
-a
+genes
 ```
 
-# Presence-absence plot for everything
+# Heatmap for different genes {.unnumbered}
 
 ```{r, eval=T}
-summary <- read.csv("~/Downloads/sulf_genomes/combined/pangenome/SUMMARY_variable/pangenome_gene_clusters_summary.txt", sep = "\t")
+summary <- read.csv("../output/pangenome_gene_clusters_summary.txt", sep = "\t")
 summary <- summary[,c("genome_name", "KOfam_ACC")]
-summary <- subset(summary, KOfam_ACC != "")
+summary <- subset(summary, KOfam_ACC != "" & genome_name != "sulf_ctg_121" & genome_name != "sulf_ctg_16")
 
-test <- as.matrix(table(summary$genome_name, summary$KOfam_ACC))
+heat_matrix <- as.matrix(table(summary$genome_name, summary$KOfam_ACC))
 
-a <- pheatmap(test, show_colnames=F)
-a
+#heatmap_all <- pheatmap(heat_matrix, show_colnames=F)
+
+index <- NULL
+for (i in 1:ncol(heat_matrix)){
+  if (length(unique(heat_matrix[,i])) > 1){
+    index[i] <- TRUE
+  } else {
+    index[i] <- FALSE
+  }
+}
+matrix_small <- heat_matrix[,which(index == TRUE)]
+
+heatmap <- pheatmap(matrix_small, show_colnames=F)
+heatmap
+```
+
+# Compute genome similarity {.unnumbered}
+
+```{r, engine='bash'}
+anvi-compute-genome-similarity --external-genomes sulf_external_genomes.txt --program pyANI --output-dir combined/ANI --num-threads 4 --pan-db combined/pangenome/pangenome-PAN.db
+```
+
+![average nucleotide identity at the 95% level](../output/sulf-ani.png)
+
+# Genome synteny {-}
+
+```{r, engine='bash'}
+anvi-analyze-synteny -g sulf-all-GENOMES.db --annotation-source KOfam --ngram-window-range 2:3 -o ngrams -p pangenome/pangenome-PAN.db --ngram-source gene_clusters
+```
+
+```{r}
+ngrams <- read.csv("~/Downloads/sulf_genomes/combined/ngrams", sep = "\t")
 ```

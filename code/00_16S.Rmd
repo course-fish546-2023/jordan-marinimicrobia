@@ -14,6 +14,7 @@ output:
 library(tidyverse)
 library(knitr)
 library(Biostrings)
+library(pheatmap)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -45,6 +46,10 @@ Workflow of code:
 - 01-annotating-bins: Get completion, redundancy, and other statistics on different binning methods for Sulfitobacter
 - 02-anvio: Create pangenome of Sulfitobacter in anvio using my bins and reference genomes
 - 03-ko: Create presence-absence plots using Kegg orthologs
+
+End goal:
+
+![](../output/sulf-diff-heatmap.png)
 
 *This document goes over 16S annotation*
 
@@ -108,7 +113,7 @@ all$depth <- str_split_fixed(all$bin_id, "_", 7)[,5]
 all$depth <- as.integer(as.character(all$depth))
 all$station <- str_split_fixed(all$bin_id, "_", 7)[,3]
 sulf <- subset(all, lca_tax_slv == "Bacteria;Proteobacteria;Alphaproteobacteria;Rhodobacterales;Rhodobacteraceae;Sulfitobacter;" & sizefrac != "3um" & station != "P3")
-a <- ggplot(sulf, aes(x=depth)) + 
+depth <- ggplot(sulf, aes(x=depth)) + 
      geom_bar(width=20) +
      theme_bw() +
      coord_flip() +
@@ -116,5 +121,5 @@ a <- ggplot(sulf, aes(x=depth)) +
      scale_x_reverse() +
      xlab("Depth (m)") +
      ylab("Number of 16S reads")
-a
+depth
 ```

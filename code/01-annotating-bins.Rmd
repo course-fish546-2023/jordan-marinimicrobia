@@ -124,8 +124,7 @@ Run BUSCO on my own computer, has to be done in a dedicated environment. I am us
 
 ```{bash}
 conda activate busco
-busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -l bacteria_odb10 \
--m geno -o github/jordan-marinimicrobia/output/busco_outputs_sulf -c 8
+busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -m geno -o github/jordan-marinimicrobia/output/busco_outputs_sulf -c 8 --auto-lineage-prok
 ```
 
 Combine BUSCO output table with bins summary.
