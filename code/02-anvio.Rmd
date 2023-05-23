@@ -26,7 +26,7 @@ opts_chunk$set(
 
 *This document details visualization in anvio*
 
-Anvio is run in a dedicated environment.
+Anvio is a program for visualizing metagenomic data and creating a pangenome. Anvio is run in a dedicated environment.
 
 ```{bash}
 conda activate anvio-7.1
@@ -34,7 +34,7 @@ conda activate anvio-7.1
 
 # Get bin info {-}
 
-Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin
+Get bin info into a format that anvio can use. This means concatenating the bin files for each method, so there's a list of which contig/read goes in which bin.
 
 ```{r}
 # get all bin directories
@@ -71,7 +71,7 @@ for (i in 2:7){
 }
 ```
 
-Examine tsv files.
+Examine output tsv files.
 
 ```{r, eval=T}
 tsv_output <- read.csv("../output/all_bins/assembly_bins.tsv", sep = "\t")
@@ -80,7 +80,7 @@ kable(head(tsv_output, 5))
 
 # Import bins into anvio {-}
 
-Get the bins into the anvio database already created.
+Get the bin information into the anvio database already created.
 
 ```{bash}
 # Example for one bin import, change import and -C for each
@@ -89,23 +89,25 @@ anvi-import-collection "./github/jordan-marinimicrobia/output/all_bins/short_rea
 
 # Run interactive browser {-}
 
+Use the interactive browser to visualize the metagenome and bins.
+
 ```{bash}
 anvi-interactive -p "./Downloads/plus_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_plus/1058_P1_2018_585_0.2um_assembly_plus.db"
 ```
 
-Example of what the interactive browser looks like with bins. Anvio calculates statistics like completion and redundancy for each bin.
+This is an example of what the interactive browser looks like with bins. Anvio calculates statistics like completion and redundancy for each bin.
 
-![Anvio interactive browser](../output/anvi-interactive.png)
+![Anvio interactive browser with bins](../output/anvi-interactive.png)
 
 # Refine bins {-}
 
-Dig into "contaminated" bins to see how/why they are contaminated. Reminder that "." is changed to "_" and 24 and 47 are written out in the anvi bin database.
+Dig into "contaminated" bins to see how/why they are contaminated. Reminder that the naming scheme for bins has different syntax-- "." is changed to "_" and 24 and 47 are written out in the anvi bin database.
 
 ```{bash}
 anvi-refine -p "./Downloads/assembly_PROFILE.db" -c "./Library/CloudStorage/GoogleDrive-jwinter2@uw.edu/Shared drives/Rocap Lab/Project_ODZ_Marinimicrobia_Jordan/Anvio/assembly_only/1058_P1_2018_585_0.2um_assembly.db" -C shortreads -b short_reads_bam_bin_163
 ```
 
-Example of a contaminated bin. The coverage is not consistent, there are many branches within the clustering algorithm anvio uses to group sequences, and there are many duplicated single copy core genes.
+Example of a contaminated bin. The coverage is not consistent, there are many branches in the clustering algorithm anvio uses to group sequences, and there are a plethora of duplicated single copy core genes.
 
 ![Anvio interactive display of a contaminated bin](../output/contaminated-bin.png)
 
@@ -120,7 +122,9 @@ summary(summary)
 
 # Creating pangenome {-}
 
-Create anvio dbs for my bins and annotate them with COG, Kegg, HMMs, and tRNAs. Use the interactive database to visualize the pangenome, and find variable regions of the Sulfitobacter genome. These I will dive into further in the next section.
+I will be making a pangenome using the assembly plus bins because these are lower in contamination but contain more contigs than just the assembly bins. In addition to my bins, I got three complete genomes from cultured *Sulfitobacter pontiacus* and added those to my pangenome.
+
+I created anvio databases (dbs) for my bins and annotated them with COG, Kegg, HMMs, and tRNAs. I used the interactive database to visualize the pangenome, and find variable regions of the Sulfitobacter genome. This is what I based the next markdown document on.
 
 ```{bash}
 anvi-gen-contigs-database -f sulf_genomes/assembly_plus_bin_4.fa -o sulfbin4.db
@@ -139,6 +143,6 @@ anvi-pan-genome -g sulf-GENOMES.db -n sulfitobacter
 anvi-display-pan -g sulf-GENOMES.db -p sulfitobacter/sulfitobacter-PAN.db
 ```
 
-Pangenome visualization.
+Pangenome visualization. The variable regions are labeled, and sulf 1, 2, and 3 are the cultured genomes.
 
 ![Sulfitobacter pangenome](../output/sulf_pan.png)

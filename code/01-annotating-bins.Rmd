@@ -17,6 +17,7 @@ library(Biostrings)
 library(dplyr)
 library(ggalluvial)
 library(knitr)
+library(kableExtra)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -32,7 +33,7 @@ opts_chunk$set(
 
 # Find bins that are Sulfitobacter {.unnumbered}
 
-These bins are MAGs (metagenome assembled genomes), and I'll find which are Sulfitobacter by using the CATBAT consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Roseobacteraceae, which is the family Sulfitobacter is in.
+Now that I've verified my 16S reads are *Sulfitobacter pontiacus*, I'll check the bins. These bins are MAGs (metagenome assembled genomes), and I'll find which are Sulfitobacter by using the CATBAT (https://github.com/dutilh/CAT) consensus results of what each contig is. Since I know what microbe each contig is, I'll look for bins where most contigs are Roseobacteraceae, which is the family Sulfitobacter is in.
 
 ```{r}
 # open file with all CATBAT results
@@ -48,12 +49,14 @@ for (i in 2:7){
   pathname <- paste0(bin_path[i], "/")
   bins <- list.files(pathname)
   
+  # get names of contigs in each bin
   for (binname in bins){
     print(binname)
     bin_pathname <- paste0(pathname, binname)
     contig_names <- read.csv(bin_pathname, header=F)
     all_contigs <- NULL
     
+    # find contig names in the CATBAT results file
     for (i in 1:nrow(contig_names)){
       contigname <- contig_names[i,1]
       find_contig <- classification %>%
@@ -61,18 +64,19 @@ for (i in 2:7){
       all_contigs <- rbind(all_contigs, find_contig)
     }
     
-    # majority of ORFs have to be Marinimicrobia for me to look at the bin
+    # most ORFs (genes) have to be Sulfitobacter for me to look at the bin
     all_contigs$ORFs <- str_split_fixed(all_contigs$reason, "[ ]", 4)[,3]
     all_contigs$ORFs_true <- as.numeric(str_split_fixed(all_contigs$ORFs, "[/]", 4)[,1])
     consensus <- all_contigs %>%
       group_by(family) %>%
       summarize(support = sum(ORFs_true)) %>%
-      filter(family != "no support") # only to get all possible Mar bins
+      filter(family != "no support") # don't include no support as a category
     index <- which(str_detect(consensus$family, "Roseobacteraceae"))
     consensus$family[index] <- "Roseobacteraceae"
     consensus <- consensus$family[which(consensus$support == max(consensus$support))]
     print(consensus)
     
+    # if consensus is Roseobacter, add it to the bin list
     if (identical(consensus[str_detect(consensus, "Roseobacteraceae")], character(0)) == F){
       a <- a + 1
       sulf_bins$bin[a] <- binname
@@ -85,7 +89,7 @@ sulf_bins <- as.data.frame(sulf_bins)
 write.csv(sulf_bins, "../output/all_sulf_bins.csv")
 ```
 
-Look at the Sulfitobacter bin output file.
+Look at the Sulfitobacter bin output file. It contains the contig name and bin.
 
 ```{r, eval=T}
 sulf_bins <- read.csv("../output/all_sulf_bins.csv")
@@ -94,7 +98,9 @@ head(sulf_bins$bin)
 
 # BUSCO {.unnumbered}
 
-Use BUSCO (which is similar to CheckM to get completeness, contamination, etc of bins). This is run on my own computer, hence the Google Drive files.
+Once I have the bins I want, I can get some summary statistics. I used BUSCO (https://busco.ezlab.org) to get completeness, contamination, etc of bins. This is run on my own computer in a dedicated Conda environment, hence the Google Drive files.
+
+The first step is to get fasta files of each bin, so putting all the contig fasta files into one file.
 
 ```{r}
 # Get fasta files for each bin
@@ -106,28 +112,37 @@ for (i in 1:nrow(sulf_bins)){
   bin <- sulf_bins$bin[i]
   bintype <- sulf_bins$sample[i]
   bin_nms <- read.csv(paste0(path, bintype, "/", bin), header = F)
+  
+  # find all instances of each contig in the giant fasta file
   small_fa <- str_detect(all@ranges@NAMES, paste(bin_nms$V1, collapse = "|"))
   index <- which(small_fa == T)
   small_fa <- all[index]
+  
+  # export as a fasta file
   writeXStringSet(small_fa, paste0("../data/Bin_fa_sulf/", bin), format = "fasta")
 }
 ```
 
-Check output fasta files
+Check output fasta files.
 
 ```{r, eval=T}
-fa <- readDNAStringSet("../data/Bin_fa_sulf/24_sample_bam_bin.11")
+fa <- readDNAStringSet("../data/Bin_fa_sulf/47_sample_bam_bin.41")
 fa
 ```
 
-Run BUSCO on my own computer, has to be done in a dedicated environment. I am using the generic bacteria database to search for single copy marker genes.
+Then, run BUSCO. I let BUSCO choose the lineage in each of my bins to get specific single copy marker genes (SCGs) for the Roseobacter family or Sulfitobacter genus rather than just general bacterial SCGs.
 
 ```{bash}
 conda activate busco
 busco -i github/jordan-marinimicrobia/data/Bin_fa_sulf -m geno -o github/jordan-marinimicrobia/output/busco_outputs_sulf -c 8 --auto-lineage-prok
 ```
 
-Combine BUSCO output table with bins summary.
+Check BUSCO summary and combine it with the bins summary.
+
+```{r, eval=T}
+busco <- read.delim("../output/busco_outputs_sulf/batch_summary.txt")
+head(busco)
+```
 
 ```{r}
 busco <- read.delim("../output/busco_outputs_sulf/batch_summary.txt")
@@ -138,12 +153,13 @@ write.csv(sulf_bins, "../output/all_sulf_bins.csv", row.names = F)
 
 # Add sequence length to bin summary {.unnumbered}
 
-Get sequence length of all the bins and add it to bin summary table
+Get sequence length of all the bins and add it to bin summary table.
 
 ```{r}
 bin_path <- list.files("../data/Bin_fa_sulf") # annotated fasta files for each bin
 lengths <- NULL
 
+# get length of fasta files
 for (i in 1:length(bin_path)){
   
   bin <- bin_path[i]
@@ -164,12 +180,12 @@ Look at bins summary table.
 
 ```{r, eval=T}
 sulf_bins <- read.csv("../output/all_sulf_bins.csv")
-kable(head(sulf_bins, 5))
+kable(head(sulf_bins, 5)) %>% scroll_box(width="100%", height = "200px")
 ```
 
 # Create alluvial plot {.unnumbered}
 
-Create alluvial plot to check what contigs/reads went where in each binning method using 47_sample_bam_bin.81, which is Sulfitobacter. As can be seen in the plot, most binning methods had the same contigs in them.
+Create alluvial plot to check what contigs/reads went where in each binning method using 47_sample_bam_bin.81, which is Sulfitobacter. As can be seen in the plot, most binning methods had the same contigs in them. This indicates it's likely these contigs do belong in the same bin.
 
 ```{r, eval=T}
 # open file
@@ -178,6 +194,7 @@ alluvial <- read.csv("../output/for_alluvial_plot.csv")
 # choose starting bin
 alluvial <- subset(alluvial, X47_sample_bam_bins == "47_sample_bam_bin.81")
 
+# manipulate data to get it in a format for the alluvial plot
 alluvial <- pivot_longer(alluvial, cols=c(colnames(alluvial)[2:7]), names_to="bin_method", values_to="bin")
 alluvial <- subset(alluvial, is.na(bin) == F)
 alluvial$bin_method <- factor(alluvial$bin_method, levels = c("X24_sample_bam_bins","X47_sample_bam_bins", "short_reads_bam_bins",

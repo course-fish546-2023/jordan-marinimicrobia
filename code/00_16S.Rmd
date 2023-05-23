@@ -26,7 +26,7 @@ opts_chunk$set(
 )
 ```
 
-I have 4 total documents detailing my project. Here are all 4 in order, including this one, the first document:
+I have 4 total documents detailing my project. Here are all 4 in order, including this one:
 
 https://rpubs.com/jwinter2/ssu16s
 
@@ -55,7 +55,7 @@ End goal:
 
 # Getting 16S reads {-}
 
-Get all reads for Sulfitobacter
+Get all reads for Sulfitobacter based on taxonomic classification by Silva. My reads are most likely *Sulfitobacter pontiacus*, but I need to check by putting the sequences on a phylogenetic tree.
 
 ```{r, eval=T}
 tax <- read.csv("~/Downloads/16S_mar/silva_all_reads_resultlist.csv")
@@ -70,35 +70,38 @@ fasta_sulf
 
 # Aligning sequences {-}
 
-Next, I got Sulfitobacter 16S sequences and outgroups from SILVA. Then I used SSU-align to align the sequences. Use --gapthresh 0.9 if you want to clean up the gaps.
+Next, I got additional Sulfitobacter 16S sequences and some outgroups from SILVA to use on my phylogenetic tree. Then I used SSU-align in Terminal to align the sequences. Use --gapthresh 0.9 if you want to clean up the gaps.
 
 ```{bash}
 ssu-align sulf_ref_and_mine.fa sulf_align
 ssu-mask sulf_align --afa
 ```
 
-After aligning, I viewed the aligned sequences in AliView to make sure the alignment looked reasonable. I exported the AliView file to change the . to - in the fasta file (the . just indicated areas that could be misaligned, so a - was put there to not "count" those towards the ML tree).
+After aligning, I viewed the aligned sequences in AliView to make sure the alignment looked reasonable. I exported the AliView file to change the . to - in the fasta file (the . just indicated areas that could be misaligned, so a - was put there to not "count" those towards the maximum likelihood tree).
 
-![](../output/sulf_16S_alignment.png)
+![Aligned Sulfitobacter sequences in AliView](../output/sulf_16S_alignment.png)
 
-# Making a tree {-}
+# Making a Sulfitobacter species phylogenetic tree {-}
 
-Run RAxML to make tree. This is an example of what to run, I use the RAxML GUI. I use the GTR gamma model, and initially did not bootstrap to save some time.
+I ran RAxML to make tree. This is an example of what to run-- I use the RAxML GUI (https://antonellilab.github.io/raxmlGUI/). I use the GTR gamma model, and initially did not bootstrap to save some time. The goal was to see if my sequences ended up with the known *Sulfitobacter pontiacus* sequences.
 
 ```{r, engine='bash'}
 /Applications/raxmlGUI.app/Contents/Resources/static/bin/raxml-ng --all --msa Downloads/contigs_and_clades_fixed_modified.fasta --model GTR+G --prefix Downloads/contigs_and_clades_fixed_raxml/contigs_and_clades_fixed_1 --seed 221239 --outgroup AJ430587_Caldithrix_abyssi --bs-metric tbe --tree rand{1} --bs-trees 100
 ```
 
-Once I had the maximum likelihood (ML) tree, I visualized it in ITOL (itol.embl.de) and manually curated the reads into their species based on the results. While not all species were monophyletic, most were, and all of my 16S reads grouped with Sulfitobacter pontiacus.
+Once I had the maximum likelihood (ML) tree, I visualized it in ITOL (https://itol.embl.de) and manually curated the reads into their species based on their nearest neighbors. While not all species were monophyletic, most were, and all of my 16S reads grouped with *Sulfitobacter pontiacus*.
 
-![](../output/sulf-16S.png)
+![Phylogenetic tree of Sulfitobacter species](../output/sulf-16S.png)
 
 # Plotting Sulfitobacter 16S with depth {-}
 
-Almost all the Sulfitobacter pontiacus was found at P1, the coastal station (still within the oxygen deficient zone), and at 585 m.
+After verifying my sequences were *Sulfitobacter pontiacus*, I plotted their distribution with depth at the ODZ stations. Almost all the *Sulfitobacter pontiacus* was found at P1, the coastal station (still within the oxygen deficient zone), and at 585 m.
 
 ```{r, eval = T}
+# read in data
 all <- read.csv("~/Downloads/16S_mar/silva_all_reads_resultlist.csv")
+
+# get metadata into readable columns
 all$code <- str_split_fixed(all$sequence_identifier, "___", 3)[,3]
 unclassified <- which(all$lca_tax_slv == "Unclassified;")
 all$lca_tax_slv[unclassified] <- "Unclassified;Unclassified"
@@ -112,7 +115,11 @@ all$sizefrac <- str_split_fixed(all$bin_id, "_", 7)[,6]
 all$depth <- str_split_fixed(all$bin_id, "_", 7)[,5]
 all$depth <- as.integer(as.character(all$depth))
 all$station <- str_split_fixed(all$bin_id, "_", 7)[,3]
+
+# subset data for Sulfitobacter in the small size fraction at P1 and P2
 sulf <- subset(all, lca_tax_slv == "Bacteria;Proteobacteria;Alphaproteobacteria;Rhodobacterales;Rhodobacteraceae;Sulfitobacter;" & sizefrac != "3um" & station != "P3")
+
+# make depth plot
 depth <- ggplot(sulf, aes(x=depth)) + 
      geom_bar(width=20) +
      theme_bw() +
@@ -120,6 +127,6 @@ depth <- ggplot(sulf, aes(x=depth)) +
      facet_wrap(~station) + 
      scale_x_reverse() +
      xlab("Depth (m)") +
-     ylab("Number of 16S reads")
+     ylab("Number of Sulfitobacter pontiacus 16S reads")
 depth
 ```
