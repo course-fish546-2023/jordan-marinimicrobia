@@ -26,6 +26,8 @@ opts_chunk$set(
 )
 ```
 
+DOI: https://doi.org/10.5281/zenodo.7967443
+
 I have 4 total documents detailing my project. Here are all 4 in order, including this one:
 
 https://rpubs.com/jwinter2/ssu16s
