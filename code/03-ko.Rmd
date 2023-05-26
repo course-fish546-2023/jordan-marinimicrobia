@@ -15,6 +15,7 @@ library(tidyverse)
 library(knitr)
 library(pheatmap)
 library(DT)
+library(stringr)
 opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Don't evaluate code chunks
@@ -99,7 +100,7 @@ anvi-compute-genome-similarity --external-genomes sulf_external_genomes.txt --pr
 
 ![average nucleotide identity at the 95% level](../output/sulf-ani.png)
 
-# Genome synteny {-}
+# Genome synteny {.unnumbered}
 
 Get genome synteny for later use. This is a measure of what is where on each genome.
 
@@ -107,7 +108,7 @@ Get genome synteny for later use. This is a measure of what is where on each gen
 anvi-analyze-synteny -g sulf-all-GENOMES.db --annotation-source KOfam --ngram-window-range 2:3 -o ngrams -p pangenome/pangenome-PAN.db --ngram-source gene_clusters
 ```
 
-# Look at plasmids {-}
+# Look at plasmids {.unnumbered}
 
 It seems that *Sulfitobacter pontiacus* has several plasmids. Get the plasmids for each genome and take a qualitative look at what is on them.
 
@@ -126,9 +127,59 @@ anvi-export-functions -c plasmid3_sulf3.db -o plasmid3_sulf3-functions.txt
 Look at the genes in each plasmid. There seem to be two main types of plasmids, those with transport genes (for iron transport, for example) and those with cytochromes (cbb3, which is used in low oxygen environments).
 
 ```{r}
-plasmid_genes <- read.csv("~/Downloads/sulf_plasmids/plasmid3_sulf1-functions.txt", sep = "\t")
-plasmid_genes <- plasmid_genes[,c("gene_callers_id", "source", "function.")]
-plasmid_genes <- pivot_wider(plasmid_genes, names_from = source, values_from = function.)
+# for just one plasmid
+# plasmid_genes <- read.csv("~/Downloads/sulf_plasmids/plasmid3_sulf1-functions.txt", sep = "\t")
+# plasmid_genes <- plasmid_genes[,c("gene_callers_id", "source", "function.")]
+# plasmid_genes <- pivot_wider(plasmid_genes, names_from = source, values_from = function.)
 
-unique(plasmid_genes$COG20_FUNCTION)
+# use following line for visual inspection
+#unique(plasmid_genes$COG20_FUNCTION)
+
+# create presence-absence plot for all plasmids
+plasmid_genes <- read.csv("../output/sulf-plasmids-cog.csv")
+
+# clean up weird path name
+weirdname <- which(plasmid_genes$COG20_PATHWAY == "Non-phosphorylated Entner-Doudoroff pathway!!!Non-phosphorylated Entner-Doudoroff pathway")
+plasmid_genes$COG20_PATHWAY[weirdname] <- "Non-phosphorylated Entner-Doudoroff pathway"
+
+weirdname <- which(plasmid_genes$COG20_PATHWAY =="Cysteine biosynthesis!!!Cysteine biosynthesis")
+plasmid_genes$COG20_PATHWAY[weirdname] <- "Cysteine biosynthesis"
+
+all_paths <- unique(plasmid_genes$COG20_PATHWAY)
+pathway <- NULL
+
+for (plasmid_name in unique(plasmid_genes$plasmid)){
+   small <- subset(plasmid_genes, plasmid == plasmid_name)
+   results <- NULL
+   for (i in 1:length(all_paths)){
+     path <- all_paths[i]
+     results$count[i] <- length(which(small$COG20_PATHWAY == path))
+     results$path[i] <- path
+   }
+   results <- as.data.frame(results)
+   results$plasmid <- plasmid_name
+   pathway <- rbind(pathway, results)
+}
+
+pathway$presence <- "no"
+index <- which(pathway$count > 0)
+pathway$presence[index] <- "yes"
+pathway <- subset(pathway, is.na(pathway$path) == F)
+pathway$bin <- str_split_fixed(pathway$plasmid, "_", 2)[,2]
+pathway$plasmid <- str_split_fixed(pathway$plasmid, "_", 2)[,1]
+
+# don't look at plasmid with no pathways
+pathway <- subset(pathway, plasmid != "plasmid6")
+
+#Plot genes of interest
+
+# presence-absence
+presence <- ggplot(pathway, aes(plasmid, path, fill=presence)) +
+   geom_tile(color="black") +
+   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+   scale_fill_grey(start = 1, end = 0.5) +
+   theme_bw() +
+  facet_wrap(~bin, scales = "free_x")
 ```
+
+![presence-absence plot of genes on Sulfitobacter plasmids](../output/sulf-plasmids.png)
