@@ -27,7 +27,7 @@ opts_chunk$set(
 )
 ```
 
-*This document details Kegg pathways and creation of the presence/absence plot*
+*This document details Kegg pathways and creation of the heatmap*
 
 # Get summary stats on genomes {.unnumbered}
 
@@ -89,6 +89,42 @@ matrix_small <- heat_matrix[,which(index == TRUE)]
 heatmap <- pheatmap(matrix_small, show_colnames=F)
 heatmap
 ```
+
+Look at areas with many of the same KO. Some of these genes may be on plasmids.
+
+```{r}
+# get list of columns with more than 5 genes
+index <- which(matrix_small > 5, arr.ind=T)
+index <- as.data.frame(index)
+index$row <- rownames(index)
+index$row <- str_split_fixed(index$row, "[.]", 2)[,1]
+
+# get KO for each column
+columns <- as.data.frame(colnames(matrix_small))
+colnames(columns) <- "KO"
+columns$col <- rownames(columns)
+lots_genes <- merge(index, columns)
+
+# get annotations for KO numbers
+summary <- read.csv("../output/pangenome_gene_clusters_summary.txt", sep = "\t")
+summary <- summary[,c("KOfam", "KOfam_ACC")]
+colnames(summary) <- c("KOname", "KO")
+summary <- unique(summary)
+lots_genes <- merge(lots_genes, summary)
+lots_genes <- lots_genes[, c("row", "KOname")]
+lots_genes <- unique(lots_genes)
+
+# plot results
+many <- ggplot(lots_genes) +
+  geom_bar(aes(x=KOname, fill=row)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=10)) +
+  ylab("Number of genomes") +
+  xlab("KO family name") +
+  scale_fill_discrete(name = "Genome")
+many
+```
+
+![](../output/sulf-lots-genes.png)
 
 # Compute genome similarity {.unnumbered}
 
